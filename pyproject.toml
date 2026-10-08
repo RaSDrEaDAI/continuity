@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "continuity"
+version = "0.1.0"
+description = "Character-sheet + beat list in, QC-gated multi-shot video out. Self-auditing pipeline built on the Comfy Developer Platform (local FLUX keyframes + LTX-2.5 mints on RTX 5090)."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.10"
+authors = [{ name = "Deep Vibe / RaSDrEaDAI" }]
+keywords = ["comfyui", "flux", "ltx", "video-generation", "qc", "pipeline"]
+dependencies = [
+    "requests>=2.31",
+    "pillow>=10.0",
+]
+
+[project.optional-dependencies]
+auditor = ["transformers>=4.40"]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+continuity = "continuity.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["continuity*"]

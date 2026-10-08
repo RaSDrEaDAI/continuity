@@ -1,0 +1,27 @@
+{
+  "charsheet": "skinny lean male nomad mid-40s; off-white galabia; teal tagelmust veil covering nose and mouth, calm dark eyes only; round silver goggles pushed up on his forehead above the veil; brown leather harness; backpack with brass radio box, warm amber glow, copper antenna staff; baggy off-white canvas cargo trousers bunched at the ankles over dark brown mid-calf lace-up trekking boots",
+  "beats": [
+    {
+      "id": "M1_01",
+      "locks": [
+        "exactly one man and one camel, no other people or animals anywhere",
+        "both face and walk toward the RIGHT edge, heads forward, never turned back"
+      ],
+      "scene": "wide salt flat at first light, cracked salt crust stretching to a flat dry horizon, no water, no sea, no lake, the two figures small in the frame mid-distance",
+      "tod": "low golden dawn light from the right, long violet shadows",
+      "camera": "lateral_track",
+      "seed": 7001
+    },
+    {
+      "id": "M1_02",
+      "locks": [
+        "zero people, zero animals, zero rope or cords",
+        "only trouser, boot, salt and sky in frame"
+      ],
+      "scene": "extreme close macro of a dark brown trekking boot pressing into cracked salt crust, crystals fracturing outward, boot toe foreground, salt plain soft behind",
+      "tod": "low golden dawn light raking across the crust",
+      "camera": "static_drift",
+      "seed": 7002
+    }
+  ]
+}
