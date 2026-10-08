@@ -77,7 +77,10 @@ def test_audit_t5_exact_dead_text():
         pytest.skip("transformers not installed")
     from continuity.auditor.prompt_lint import audit_prompt
 
-    fill = "cracked hexagonal crust tiles glowing under pale morning light " * 14
+    fill = (
+        "cracked hexagonal crust tiles glowing faintly under pale morning light "
+        "while distant heat shimmer bends the horizon line "
+    ) * 14
     over = audit_prompt(
         "exactly one camel and absolutely no people; " + fill
         + "; the traveler pauses beside a weathered stone marker",
