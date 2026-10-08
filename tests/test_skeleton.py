@@ -62,3 +62,36 @@ def test_mint_prompt_carries_camera():
     spec = MintSpec(beat_id="b1", keyframe_path="kf.png", camera="lateral_track")
     text = build_mint_prompt(spec, "two figures cross the salt flat")
     assert CAMERA_GRAMMAR["lateral_track"].split(",")[0] in text
+
+
+T5_TOKENIZER = "C:/Users/Owner/ComfyUI-Installs/ComfyUI/ComfyUI/comfy/text_encoders/t5_tokenizer"
+
+
+def test_audit_t5_exact_dead_text():
+    import pytest
+    if not Path(T5_TOKENIZER).exists():
+        pytest.skip("T5 tokenizer not present on this machine")
+    try:
+        from transformers import T5TokenizerFast  # noqa: F401
+    except ImportError:
+        pytest.skip("transformers not installed")
+    from continuity.auditor.prompt_lint import audit_prompt
+
+    fill = "cracked hexagonal crust tiles glowing under pale morning light " * 14
+    over = audit_prompt(
+        "exactly one camel and absolutely no people; " + fill
+        + "; the traveler pauses beside a weathered stone marker",
+        T5_TOKENIZER,
+    )
+    assert over.total_tokens > 256
+    assert over.dead_text, "text past the 256 window must be flagged dead"
+    assert not over.ship_ok
+
+    under = audit_prompt(
+        "exactly one camel and absolutely no people; wide salt flat, "
+        "flat dry horizon, no water",
+        T5_TOKENIZER,
+    )
+    assert under.total_tokens < 250
+    assert under.ship_ok and not under.dead_text
+    assert under.locks and under.locks[0].start_token == 0

@@ -22,6 +22,10 @@ def build_parser() -> argparse.ArgumentParser:
 
     audit_p = sub.add_parser("audit-text", help="quick audit of one prompt string")
     audit_p.add_argument("--text", required=True)
+    audit_p.add_argument(
+        "--tokenizer",
+        help="T5 tokenizer path for exact token counts (else word estimate)",
+    )
 
     run_p = sub.add_parser("run", help="orchestrate the full pipeline")
     run_p.add_argument("--beats", required=True, help="path to beats.json")
@@ -39,8 +43,12 @@ def main(argv=None) -> int:
         return 0
 
     if args.stage == "audit-text":
-        from continuity.auditor.prompt_lint import audit_prompt_text
-        result = audit_prompt_text(args.text)
+        if args.tokenizer:
+            from continuity.auditor.prompt_lint import audit_prompt
+            result = audit_prompt(args.text, args.tokenizer)
+        else:
+            from continuity.auditor.prompt_lint import audit_prompt_text
+            result = audit_prompt_text(args.text)
         print(result.summary())
         return 0 if result.ship_ok else 1
 
