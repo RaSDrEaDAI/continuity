@@ -79,3 +79,15 @@ Platform fit (the T1 finding):
   (RaSDrEaDAI/continuity, private until submission review), MIT, stage layout,
   .env.example, fresh-clone README, skeleton test suite green.
 
+
+- **Oct 8 21:30 local (hermes-comfy):** T4 executed for real: keyframe lane ported
+  from the proven SN production driver into `continuity/keyframe/lane.py` — deck
+  loader (charsheet + beats + model spec), locks-first prompt assembly, T3-auditor
+  ship gate wired in (dirty prompt aborts before any GPU time), full 11-node
+  API-format FLUX graph with LoRA chain, endpoint-agnostic client (8188/8189/
+  proxy/managed), resume-safe renders, manifest + seed log + labeled contact
+  sheet. CLI: `continuity keyframe --beats ... --endpoint ...`. Live proof:
+  8-beat Signal Nomad demo deck (examples/sn_demo8.beats.json), every prompt
+  T5-exact gated 139-203 tokens, 8/8 frames rendered on the 5090 (~22s/frame).
+  Board note: second false-completion sweep (13:17 UTC) reverted + a live
+  status-tampering loop detected on the dashboard — repo commits are ground truth.

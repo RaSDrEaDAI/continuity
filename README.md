@@ -35,8 +35,8 @@ ordered master + per-shot QC report
 
 | Stage | Module | State |
 |---|---|---|
-| Token auditor | `continuity/auditor` | skeleton (T3) |
-| Keyframe lane | `continuity/keyframe` | skeleton (T4) |
+| Token auditor | `continuity/auditor` | done (T3) — T5-exact spans, dead-text flag, ship gate |
+| Keyframe lane | `continuity/keyframe` | done (T4) — gated deck renderer, resume-safe, live 8-beat demo |
 | Gate A | `continuity/gate_a` | skeleton (T5) |
 | Mint lane | `continuity/mint` | skeleton (T6) |
 | Gate B | `continuity/gate_b` | skeleton (T7) |
