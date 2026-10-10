@@ -15,7 +15,6 @@ def build_parser() -> argparse.ArgumentParser:
     sub = p.add_subparsers(dest="stage")
 
     sub.add_parser("audit", help="T3: T5 token audit + locks-front ship gate")
-    sub.add_parser("gate-a", help="T5: keyframe vision instruments")
     sub.add_parser("mint", help="T6: keyframes -> LTX-2.5 i2v clips")
     sub.add_parser("gate-b", help="T7: drift scan + consistency + motion index")
 
@@ -37,6 +36,18 @@ def build_parser() -> argparse.ArgumentParser:
     kf_p.add_argument("--limit", type=int, default=None, help="render only first N beats")
     kf_p.add_argument("--dry-run", action="store_true",
                       help="audit + plan without rendering")
+
+    ga_p = sub.add_parser("gate-a", help="T5: keyframe vision instruments")
+    ga_p.add_argument("--manifest", required=True,
+                      help="T4 keyframe manifest to gate")
+    ga_p.add_argument("--beats", required=True,
+                      help="deck JSON (per-beat qc specs live here)")
+    ga_p.add_argument("--out", default="./gate_a_reports",
+                      help="output dir for verdict JSONs")
+    ga_p.add_argument("--replay", default=None,
+                      help="answers JSON for offline ReplayProvider")
+    ga_p.add_argument("--passes", type=int, default=2,
+                      help="independent passes per instrument (default 2)")
 
     run_p = sub.add_parser("run", help="orchestrate the full pipeline")
     run_p.add_argument("--beats", required=True, help="path to beats.json")
@@ -81,6 +92,25 @@ def main(argv=None) -> int:
         if result["contact_sheet"]:
             print(f"contact sheet: {result['contact_sheet']}")
         return 0
+
+    if args.stage == "gate-a":
+        from continuity.gate_a.gate import gate_manifest
+        from continuity.gate_a.providers import ReplayProvider, provider_from_env
+        from continuity.keyframe.lane import load_deck
+        deck = load_deck(args.beats)
+        if args.replay:
+            with open(args.replay, "r", encoding="utf-8") as fh:
+                provider = ReplayProvider(json.load(fh))
+        else:
+            provider = provider_from_env()
+        summary = gate_manifest(args.manifest, deck, provider,
+                                out_dir=args.out, passes=args.passes)
+        for beat, path in summary["reports"].items():
+            print(f"  {beat}: {path}")
+        print(f"all_pass: {summary['all_pass']} "
+              f"({summary['passed']}/{summary['gated']} passed, "
+              f"failed: {summary['failed'] or 'none'})")
+        return 0 if summary["all_pass"] else 1
 
     print(f"stage '{args.stage}' wired; module implementation lands with its ticket "
           f"(see README status table)")

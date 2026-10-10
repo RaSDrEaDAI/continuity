@@ -1,5 +1,8 @@
-"""T5 — Gate A: keyframe vision instruments. A dirty frame never mints."""
+from continuity.gate_a.gate import GateSpec, gate_frame, gate_manifest
+from continuity.gate_a.instruments import INSTRUMENT_VERSION, FacingCompass
+from continuity.gate_a.providers import ReplayProvider
 
-from continuity.gate_a.instruments import FacingCompass, segment_inventory
-
-__all__ = ["FacingCompass", "segment_inventory"]
+__all__ = [
+    "FacingCompass", "GateSpec", "gate_frame", "gate_manifest",
+    "INSTRUMENT_VERSION", "ReplayProvider",
+]

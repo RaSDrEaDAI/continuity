@@ -103,6 +103,7 @@ class BeatSpec:
     camera: str = ""
     width: int | None = None
     height: int | None = None
+    qc: dict = field(default_factory=dict)  # Gate A spec (mode/expect/cast)
 
     @staticmethod
     def from_dict(d: dict) -> "BeatSpec":
@@ -116,6 +117,7 @@ class BeatSpec:
             camera=d.get("camera", ""),
             width=d.get("width"),
             height=d.get("height"),
+            qc=d.get("qc", {}) or {},
         )
 
 
@@ -350,7 +352,11 @@ def build_contact_sheet(manifest: dict, out_path: str, thumb_w: int = 512) -> st
     for beat_id in sorted(manifest):
         path = manifest[beat_id].get("file")
         if path and os.path.exists(path):
-            cells.append((beat_id, Image.open(path).convert("RGB")))
+            try:
+                cells.append((beat_id, Image.open(path).convert("RGB")))
+            except Exception as exc:  # truncated/corrupt frame must not
+                print(f"contact sheet: unreadable frame {path}: {exc}",  # kill the run
+                      file=sys.stderr)
     if not cells:
         return None
     cols = 4 if len(cells) > 4 else len(cells)

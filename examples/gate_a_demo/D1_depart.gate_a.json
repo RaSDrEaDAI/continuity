@@ -1,0 +1,60 @@
+{
+ "beat": "D1_depart",
+ "frame": "D:/1.AI/Comfy/output\\cont4\\D1_depart_s7101_00001_.png",
+ "seed": 7101,
+ "verdict": "FAIL",
+ "fails": [
+  "rope: free-hanging segment (verdict YES)",
+  "facing: cross-subject mismatch (man LEFT vs camel RIGHT)",
+  "facing_man: LEFT walks against expected R"
+ ],
+ "reads": {
+  "rope": [
+   {
+    "segments_a": 3,
+    "segments_b": 1,
+    "verdict_line": "YES",
+    "free_hanging": true
+   },
+   {
+    "segments_a": 3,
+    "segments_b": 1,
+    "verdict_line": "YES",
+    "free_hanging": true
+   }
+  ],
+  "facing_man": [
+   "LEFT",
+   "LEFT"
+  ],
+  "facing_camel": [
+   "RIGHT",
+   "RIGHT"
+  ],
+  "cast_man": [
+   1,
+   1
+  ],
+  "cast_camel": [
+   1,
+   1
+  ],
+  "gaze": [
+   "FORWARD",
+   "FORWARD"
+  ]
+ },
+ "passes": 2,
+ "agreed": true,
+ "mode": "walk",
+ "expect": "R",
+ "provider": "openai-compat:anthropic/claude-haiku-5.5",
+ "instrument_version": "gate-a/1",
+ "usage": {
+  "calls": 12,
+  "prompt_tokens": 21444,
+  "completion_tokens": 708,
+  "cost_usd": 0.0024984
+ },
+ "gated_at": "2026-10-10T01:08:31+00:00"
+}

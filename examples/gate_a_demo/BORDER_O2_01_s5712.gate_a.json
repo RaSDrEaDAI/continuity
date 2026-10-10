@@ -1,0 +1,58 @@
+{
+ "beat": "BORDER_O2_01_s5712",
+ "frame": "D:/1.AI/Comfy/output/sn_oasis5/SN_o2_O2_01_s5712_00001_.png",
+ "seed": null,
+ "verdict": "FAIL",
+ "fails": [
+  "rope: free-hanging segment (verdict YES)"
+ ],
+ "reads": {
+  "rope": [
+   {
+    "segments_a": 4,
+    "segments_b": 1,
+    "verdict_line": "YES",
+    "free_hanging": true
+   },
+   {
+    "segments_a": 4,
+    "segments_b": 1,
+    "verdict_line": "YES",
+    "free_hanging": true
+   }
+  ],
+  "facing_man": [
+   "TOWARD",
+   "TOWARD"
+  ],
+  "facing_camel": [
+   "TOWARD",
+   "TOWARD"
+  ],
+  "cast_man": [
+   1,
+   1
+  ],
+  "cast_camel": [
+   1,
+   1
+  ],
+  "gaze": [
+   "FORWARD",
+   "FORWARD"
+  ]
+ },
+ "passes": 2,
+ "agreed": true,
+ "mode": "walk",
+ "expect": null,
+ "provider": "openai-compat:anthropic/claude-haiku-5.5",
+ "instrument_version": "gate-a/1",
+ "usage": {
+  "calls": 12,
+  "prompt_tokens": 21444,
+  "completion_tokens": 617,
+  "cost_usd": 0.0024529
+ },
+ "gated_at": "2026-10-10T01:11:36+00:00"
+}

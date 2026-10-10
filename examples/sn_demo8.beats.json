@@ -1,83 +1,144 @@
 {
-  "charsheet": "Signal Nomad: skinny desert nomad mid-40s, off-white galabia, teal tagelmust over nose and mouth, silver goggles on forehead, brown harness, backpack with amber brass radio box, copper staff. Static: female dromedary, tan coat, indigo blanket and tack",
-  "style": "Retro 90s anime cel, comic shading, clean linework, 2D, not photoreal, not 3D. No text or logos",
-  "model": {
-    "unet": "flux1-krea-dev_fp8_scaled.safetensors",
-    "unet_dtype": "default",
-    "clip_l": "clip_l.safetensors",
-    "t5": "t5xxl_fp16.safetensors",
-    "vae": "ae.safetensors",
-    "loras": [{"name": "flux\\sn_caico_retro_anime.safetensors", "strength": 0.9}],
-    "steps": 22, "cfg": 1.0, "sampler": "euler", "scheduler": "simple",
-    "guidance": 3.5, "width": 1536, "height": 864
+ "charsheet": "Signal Nomad: skinny desert nomad mid-40s, off-white galabia, teal tagelmust over nose and mouth, silver goggles on forehead, brown harness, backpack with amber brass radio box, copper staff. Static: female dromedary, tan coat, indigo blanket and tack",
+ "style": "Retro 90s anime cel, comic shading, clean linework, 2D, not photoreal, not 3D. No text or logos",
+ "model": {
+  "unet": "flux1-krea-dev_fp8_scaled.safetensors",
+  "unet_dtype": "default",
+  "clip_l": "clip_l.safetensors",
+  "t5": "t5xxl_fp16.safetensors",
+  "vae": "ae.safetensors",
+  "loras": [
+   {
+    "name": "flux\\sn_caico_retro_anime.safetensors",
+    "strength": 0.9
+   }
+  ],
+  "steps": 22,
+  "cfg": 1.0,
+  "sampler": "euler",
+  "scheduler": "simple",
+  "guidance": 3.5,
+  "width": 1536,
+  "height": 864
+ },
+ "beats": [
+  {
+   "id": "D1_depart",
+   "seed": 7101,
+   "locks": [
+    "both walk RIGHT side by side, bodies, heads and noses all pointing right, gaze straight ahead, never at camera; no rope or tether, halter bare, she follows free"
+   ],
+   "scene": "SCENE: wide salt flat at first light, cracked salt crust to a flat dry horizon, no water, no sea, no lake, the two travelers small in mid-distance, long violet shadows",
+   "tod": "low golden dawn light from the right",
+   "camera": "lateral_track",
+   "qc": {
+    "mode": "walk",
+    "expect": "R"
+   }
   },
-  "beats": [
-    {
-      "id": "D1_depart",
-      "seed": 7101,
-      "locks": ["both walk RIGHT side by side, bodies, heads and noses all pointing right, gaze straight ahead, never at camera; no rope or tether, halter bare, she follows free"],
-      "scene": "SCENE: wide salt flat at first light, cracked salt crust to a flat dry horizon, no water, no sea, no lake, the two travelers small in mid-distance, long violet shadows",
-      "tod": "low golden dawn light from the right",
-      "camera": "lateral_track"
-    },
-    {
-      "id": "D2_bootmacro",
-      "seed": 7102,
-      "locks": ["zero people, zero animals, zero rope or cords; only trouser, boot, salt and sky in frame"],
-      "charsheet": "dark brown mid-calf lace-up trekking boots, thick soles, baggy off-white canvas trouser cuffs bunched at the ankles",
-      "scene": "SCENE: extreme close macro of a trekking boot pressing into cracked salt crust, crystals fracturing outward, boot toe foreground, salt plain soft behind",
-      "tod": "low golden light raking across the crust",
-      "camera": "static_drift"
-    },
-    {
-      "id": "D3_horizon",
-      "seed": 7103,
-      "locks": ["both halted in profile facing right, the man's hand shading his eyes, the camel's head high, gaze on the horizon; no rope or tether"],
-      "scene": "SCENE: telephoto heat-stack compression, far salt horizon stacked in shimmering bands, the pair silhouetted thin on a low ridge",
-      "tod": "high white midday glare",
-      "camera": "slow_push_in"
-    },
-    {
-      "id": "D4_signal",
-      "seed": 7104,
-      "locks": ["man kneels frontal facing camera, both hands on the brass radio box, five fingers per hand, gaze down on the dials; exactly one radio box exists; no rope or tether"],
-      "charsheet": "Signal Nomad: skinny desert nomad mid-40s, off-white galabia, teal tagelmust over nose and mouth, silver goggles on forehead, brown harness, nothing on his back, plain galabia cloth, no straps. Static: female dromedary, tan coat, indigo blanket and tack",
-      "scene": "SCENE: the single brass radio box with its warm amber pilot light sits on the ground before him, open pack lying beside, the camel waiting behind, hard noon light",
-      "tod": "flat bright midday",
-      "camera": "static_drift"
-    },
-    {
-      "id": "D5_whiteout",
-      "seed": 7105,
-      "locks": ["both walk RIGHT into the whiteout, bodies and heads aimed right, shapes half-dissolved in blowing salt; no rope or tether"],
-      "scene": "SCENE: salt storm whiteout, the plain erased to white, the pair ghosted halfway into the glare, only their edges holding",
-      "tod": "bloomed white no-direction light",
-      "camera": "retreating_follow"
-    },
-    {
-      "id": "D6_find",
-      "seed": 7106,
-      "locks": ["man kneels frontal at a split salt tile, both hands spreading wide over the crack, five fingers per hand, amber light rising; no rope or tether"],
-      "scene": "SCENE: a jagged seam splits the crust, faint warm light bleeding up from below, dust motes rising, the camel's shadow long across the tiles behind him",
-      "tod": "dusk blue above, amber below",
-      "camera": "slow_push_in"
-    },
-    {
-      "id": "D7_camp",
-      "seed": 7107,
-      "locks": ["man sits cross-legged frontal by a small fire, hands loose in his lap, five fingers each, the single brass radio box beside him glowing amber; no rope or tether"],
-      "charsheet": "Signal Nomad: skinny desert nomad mid-40s, off-white galabia, teal tagelmust over nose and mouth, silver goggles on forehead, brown harness, nothing on his back, plain galabia cloth, no straps. Static: female dromedary, tan coat, indigo blanket and tack",
-      "scene": "SCENE: night camp, small fire, the camel resting behind him bedded in the indigo blanket, vast star field overhead, salt plain silver at the fire rim",
-      "tod": "deep night, fire-warm vs sky-cold",
-      "camera": "static_drift"
-    },
-    {
-      "id": "D8_arrive",
-      "seed": 7108,
-      "locks": ["both walk TOWARD the camera in front three-quarter, whole bodies aimed at the viewer, gaze on the road ahead; no rope or tether, halter bare, she follows free"],
-      "scene": "SCENE: far across the plain a small green palm cluster with a faint dark water-glint at its feet, the oasis, the two travelers mid-ground walking toward it, dry salt horizon, low heat shimmer",
-      "tod": "bleached gold late morning",
-      "camera": "slow_push_in"
+  {
+   "id": "D2_bootmacro",
+   "seed": 7102,
+   "locks": [
+    "zero people, zero animals, zero rope or cords; only trouser, boot, salt and sky in frame"
+   ],
+   "charsheet": "dark brown mid-calf lace-up trekking boots, thick soles, baggy off-white canvas trouser cuffs bunched at the ankles",
+   "scene": "SCENE: extreme close macro of a trekking boot pressing into cracked salt crust, crystals fracturing outward, boot toe foreground, salt plain soft behind",
+   "tod": "low golden light raking across the crust",
+   "camera": "static_drift",
+   "qc": {
+    "mode": "env"
+   }
+  },
+  {
+   "id": "D3_horizon",
+   "seed": 7103,
+   "locks": [
+    "both halted in profile facing right, the man's hand shading his eyes, the camel's head high, gaze on the horizon; no rope or tether"
+   ],
+   "scene": "SCENE: telephoto heat-stack compression, far salt horizon stacked in shimmering bands, the pair silhouetted thin on a low ridge",
+   "tod": "high white midday glare",
+   "camera": "slow_push_in",
+   "qc": {
+    "mode": "env",
+    "cast": {
+     "man": 0,
+     "camel": 0
     }
-  ]
+   }
+  },
+  {
+   "id": "D4_signal",
+   "seed": 7104,
+   "locks": [
+    "man kneels frontal facing camera, both hands on the brass radio box, five fingers per hand, gaze down on the dials; exactly one radio box exists; no rope or tether"
+   ],
+   "charsheet": "Signal Nomad: skinny desert nomad mid-40s, off-white galabia, teal tagelmust over nose and mouth, silver goggles on forehead, brown harness, nothing on his back, plain galabia cloth, no straps. Static: female dromedary, tan coat, indigo blanket and tack",
+   "scene": "SCENE: the single brass radio box with its warm amber pilot light sits on the ground before him, open pack lying beside, the camel waiting behind, hard noon light",
+   "tod": "flat bright midday",
+   "camera": "static_drift",
+   "qc": {
+    "mode": "solo_man",
+    "cast": {
+     "man": 1,
+     "camel": 0
+    }
+   }
+  },
+  {
+   "id": "D5_whiteout",
+   "seed": 7105,
+   "locks": [
+    "both walk RIGHT into the whiteout, bodies and heads aimed right, shapes half-dissolved in blowing salt; no rope or tether"
+   ],
+   "scene": "SCENE: salt storm whiteout, the plain erased to white, the pair ghosted halfway into the glare, only their edges holding",
+   "tod": "bloomed white no-direction light",
+   "camera": "retreating_follow",
+   "qc": {
+    "mode": "walk",
+    "expect": "R"
+   }
+  },
+  {
+   "id": "D6_find",
+   "seed": 7106,
+   "locks": [
+    "man kneels frontal at a split salt tile, both hands spreading wide over the crack, five fingers per hand, amber light rising; no rope or tether"
+   ],
+   "scene": "SCENE: a jagged seam splits the crust, faint warm light bleeding up from below, dust motes rising, the camel's shadow long across the tiles behind him",
+   "tod": "dusk blue above, amber below",
+   "camera": "slow_push_in",
+   "qc": {
+    "mode": "still"
+   }
+  },
+  {
+   "id": "D7_camp",
+   "seed": 7107,
+   "locks": [
+    "man sits cross-legged frontal by a small fire, hands loose in his lap, five fingers each, the single brass radio box beside him glowing amber; no rope or tether"
+   ],
+   "charsheet": "Signal Nomad: skinny desert nomad mid-40s, off-white galabia, teal tagelmust over nose and mouth, silver goggles on forehead, brown harness, nothing on his back, plain galabia cloth, no straps. Static: female dromedary, tan coat, indigo blanket and tack",
+   "scene": "SCENE: night camp, small fire, the camel resting behind him bedded in the indigo blanket, vast star field overhead, salt plain silver at the fire rim",
+   "tod": "deep night, fire-warm vs sky-cold",
+   "camera": "static_drift",
+   "qc": {
+    "mode": "still"
+   }
+  },
+  {
+   "id": "D8_arrive",
+   "seed": 7108,
+   "locks": [
+    "both walk TOWARD the camera in front three-quarter, whole bodies aimed at the viewer, gaze on the road ahead; no rope or tether, halter bare, she follows free"
+   ],
+   "scene": "SCENE: far across the plain a small green palm cluster with a faint dark water-glint at its feet, the oasis, the two travelers mid-ground walking toward it, dry salt horizon, low heat shimmer",
+   "tod": "bleached gold late morning",
+   "camera": "slow_push_in",
+   "qc": {
+    "mode": "walk",
+    "expect": "TOWARD"
+   }
+  }
+ ]
 }

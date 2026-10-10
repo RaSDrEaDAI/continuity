@@ -1,0 +1,59 @@
+{
+ "beat": "DIRTY_O2_04_s5717",
+ "frame": "D:/1.AI/Comfy/output/sn_oasis5/SN_o2_O2_04_s5717_00001_.png",
+ "seed": null,
+ "verdict": "FAIL",
+ "fails": [
+  "rope: passes disagree [{'segments_a': 5, 'segments_b': 0, 'verdict_line': 'NO', 'free_hanging': False}, {'segments_a': 4, 'segments_b': 1, 'verdict_line': 'NO', 'free_hanging': True}]",
+  "facing_man: passes disagree ['RIGHT', 'LEFT']"
+ ],
+ "reads": {
+  "rope": [
+   {
+    "segments_a": 5,
+    "segments_b": 0,
+    "verdict_line": "NO",
+    "free_hanging": false
+   },
+   {
+    "segments_a": 4,
+    "segments_b": 1,
+    "verdict_line": "NO",
+    "free_hanging": true
+   }
+  ],
+  "facing_man": [
+   "RIGHT",
+   "LEFT"
+  ],
+  "facing_camel": [
+   "RIGHT",
+   "RIGHT"
+  ],
+  "cast_man": [
+   1,
+   1
+  ],
+  "cast_camel": [
+   1,
+   1
+  ],
+  "gaze": [
+   "GROUND",
+   "GROUND"
+  ]
+ },
+ "passes": 2,
+ "agreed": false,
+ "mode": "walk",
+ "expect": null,
+ "provider": "openai-compat:anthropic/claude-haiku-5.5",
+ "instrument_version": "gate-a/1",
+ "usage": {
+  "calls": 12,
+  "prompt_tokens": 21444,
+  "completion_tokens": 678,
+  "cost_usd": 0.0024833999999999998
+ },
+ "gated_at": "2026-10-10T01:11:07+00:00"
+}

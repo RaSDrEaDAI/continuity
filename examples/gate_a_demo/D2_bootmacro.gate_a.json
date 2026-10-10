@@ -1,0 +1,30 @@
+{
+ "beat": "D2_bootmacro",
+ "frame": "D:/1.AI/Comfy/output\\cont4\\D2_bootmacro_s7102_00001_.png",
+ "seed": 7102,
+ "verdict": "PASS",
+ "fails": [],
+ "reads": {
+  "cast_man": [
+   0,
+   0
+  ],
+  "cast_camel": [
+   0,
+   0
+  ]
+ },
+ "passes": 2,
+ "agreed": true,
+ "mode": "env",
+ "expect": null,
+ "provider": "openai-compat:anthropic/claude-haiku-5.5",
+ "instrument_version": "gate-a/1",
+ "usage": {
+  "calls": 4,
+  "prompt_tokens": 7030,
+  "completion_tokens": 36,
+  "cost_usd": 0.000721
+ },
+ "gated_at": "2026-10-10T01:13:57+00:00"
+}

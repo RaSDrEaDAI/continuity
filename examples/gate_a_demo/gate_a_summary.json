@@ -1,0 +1,32 @@
+{
+ "manifest": "D:/1.AI/Comfy/output/cont4_manifest.json",
+ "gated": 10,
+ "passed": 1,
+ "failed": [
+  "BORDER_O2_01_s5712",
+  "D1_depart",
+  "D3_horizon",
+  "D4_signal",
+  "D5_whiteout",
+  "D6_find",
+  "D7_camp",
+  "D8_arrive",
+  "DIRTY_O2_04_s5717"
+ ],
+ "all_pass": false,
+ "instrument_version": "gate-a/1",
+ "provider": "openai-compat:anthropic/claude-haiku-5.5",
+ "gated_at": "2026-10-10T01:13:57+00:00",
+ "reports": {
+  "BORDER_O2_01_s5712": "D:\\3.AIProjs\\2.Hermes\\hermes-agent\\tmp_work\\comfy_challenge\\gate_a_live\\reports\\BORDER_O2_01_s5712.gate_a.json",
+  "D1_depart": "D:\\3.AIProjs\\2.Hermes\\hermes-agent\\tmp_work\\comfy_challenge\\gate_a_live\\reports\\D1_depart.gate_a.json",
+  "D2_bootmacro": "D:\\3.AIProjs\\2.Hermes\\hermes-agent\\tmp_work\\comfy_challenge\\gate_a_live\\reports\\D2_bootmacro.gate_a.json",
+  "D3_horizon": "D:\\3.AIProjs\\2.Hermes\\hermes-agent\\tmp_work\\comfy_challenge\\gate_a_live\\reports\\D3_horizon.gate_a.json",
+  "D4_signal": "D:\\3.AIProjs\\2.Hermes\\hermes-agent\\tmp_work\\comfy_challenge\\gate_a_live\\reports\\D4_signal.gate_a.json",
+  "D5_whiteout": "D:\\3.AIProjs\\2.Hermes\\hermes-agent\\tmp_work\\comfy_challenge\\gate_a_live\\reports\\D5_whiteout.gate_a.json",
+  "D6_find": "D:\\3.AIProjs\\2.Hermes\\hermes-agent\\tmp_work\\comfy_challenge\\gate_a_live\\reports\\D6_find.gate_a.json",
+  "D7_camp": "D:\\3.AIProjs\\2.Hermes\\hermes-agent\\tmp_work\\comfy_challenge\\gate_a_live\\reports\\D7_camp.gate_a.json",
+  "D8_arrive": "D:\\3.AIProjs\\2.Hermes\\hermes-agent\\tmp_work\\comfy_challenge\\gate_a_live\\reports\\D8_arrive.gate_a.json",
+  "DIRTY_O2_04_s5717": "D:\\3.AIProjs\\2.Hermes\\hermes-agent\\tmp_work\\comfy_challenge\\gate_a_live\\reports\\DIRTY_O2_04_s5717.gate_a.json"
+ }
+}
