@@ -57,12 +57,14 @@
     },
     {
       "id": "D3_horizon",
-      "seed": 7603,
+      "seed": 7703,
       "locks": [
-        "both halted in rightward profile, thin as matchsticks; exactly one man one camel, no other people or animals; no rope or tether visible at this distance"
+        "man from behind walking right; camel ahead also walking right, riderless, nobody on its back",
+        "one man one camel only, no other figures",
+        "no rope or tether visible at this distance"
       ],
-      "scene": "SCENE: telephoto heat-stack, salt horizon in shimmering bands, the pair tiny, silhouetted on a low ridge, dry salt to horizon",
-      "tod": "heat-shimmer noon haze",
+      "scene": "SCENE: telephoto heat-stack, shimmering salt horizon, the man from behind walking right on a ridge, his riderless camel ahead, dry salt to horizon",
+      "tod": "noon heat haze",
       "camera": "push_in",
       "qc": {
         "mode": "still",
@@ -70,7 +72,8 @@
           "man": 1,
           "camel": 1
         }
-      }
+      },
+      "charsheet": "Signal Nomad: skinny desert nomad mid-40s, off-white galabia, ONE all-teal tagelmust scarf, Mujahideen-Bedouin garb: a single continuous teal cloth wrapping his head crown and hanging down over nose and mouth, no white cloth on his head, twin round silver lenses on a leather bridge up on the wrap, brown harness, weathered brown leather backpack, brass radio box strapped to its top, copper staff. Static: female dromedary, tan coat, indigo blanket"
     },
     {
       "id": "D4_signal",
