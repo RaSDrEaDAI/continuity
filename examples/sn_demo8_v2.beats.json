@@ -2,9 +2,19 @@
   "charsheet": "Signal Nomad: skinny desert nomad mid-40s, off-white galabia, teal tagelmust over nose and mouth, silver goggles on forehead, brown harness, backpack with amber brass radio box, copper staff. Static: female dromedary, tan coat, indigo blanket and tack",
   "style": "Retro 90s anime cel, comic shading, clean linework, 2D, not photoreal, not 3D. No text or logos",
   "model": {
-    "checkpoint": "flux1-dev-fp8.safetensors",
-    "lora": "flux/sn_caico_retro_anime.safetensors",
-    "lora_strength": 0.9
+    "unet": "flux1-krea-dev_fp8_scaled.safetensors",
+    "unet_dtype": "default",
+    "clip_l": "clip_l.safetensors",
+    "t5": "t5xxl_fp16.safetensors",
+    "vae": "ae.safetensors",
+    "loras": [{ "name": "flux\\sn_caico_retro_anime.safetensors", "strength": 0.9 }],
+    "steps": 22,
+    "cfg": 1.0,
+    "sampler": "euler",
+    "scheduler": "simple",
+    "guidance": 3.5,
+    "width": 1536,
+    "height": 864
   },
   "notes": "v2 hardened re-render deck (Oct 10). Fixes per Gate A v1 failure map: D1/D5 mid-scale facing-split + rope -> far-telephoto distance comps (fix4 doctrine: distance reads clean); D3 contradictory spec (env expect vs figure text) -> re-specced distant pair silhouette with cast guard; D4 phantom casts + gaze -> camel removed from text, solo guard, gaze lock; D6 camel-in-shadow mention -> camel text removed, solo; D7 rope at camp camel -> camel pushed to far dark background shape; D8 water-glint removed (desert canon), far-wide comp. Seeds +100. D2 unchanged (Gate A PASS).",
   "beats": [
