@@ -42,7 +42,7 @@ TOKENIZER = os.environ.get(
     "C:/Users/Owner/ComfyUI-Installs/ComfyUI/ComfyUI/comfy/text_encoders/t5_tokenizer",
 )
 LISTEN_HOST = os.environ.get("CONTINUITY_LISTEN_HOST", "172.26.227.76")
-LISTEN_PORT = int(os.environ.get("CONTINUITY_LISTEN_PORT", "8191"))
+LISTEN_PORT = int(os.environ.get("CONTINUITY_LISTEN_PORT", "8377"))
 
 app = FastAPI(title="continuity-serve", version="1.0.0")
 _executor = ThreadPoolExecutor(max_workers=1)  # GPU exclusivity: one job at a time
