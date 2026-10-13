@@ -50,6 +50,17 @@ class ComfyEndpoint:
         r.raise_for_status()
         return r.json()["prompt_id"]
 
-    def poll(self, prompt_id: str) -> dict:
-        """Poll history until the job resolves; return its outputs (T8)."""
-        raise NotImplementedError("T8: poll loop + artifact retrieval")
+    def poll(self, prompt_id: str, timeout_s: int = 2400, poll_s: float = 1.5) -> dict:
+        """Poll /history until the job resolves; return status + outputs (T8)."""
+        import time as _t
+        t0 = _t.time()
+        while _t.time() - t0 < timeout_s:
+            r = requests.get(f"{self.base_url}/history/{prompt_id}", timeout=30)
+            r.raise_for_status()
+            hist = r.json().get(prompt_id)
+            if hist:
+                return {"prompt_id": prompt_id,
+                        "status": hist.get("status"),
+                        "outputs": hist.get("outputs")}
+            _t.sleep(poll_s)
+        raise TimeoutError(f"prompt {prompt_id} unresolved after {timeout_s}s")

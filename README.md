@@ -83,6 +83,45 @@ See `examples/beats.example.json`. Each beat carries its prompt blocks
 camera grammar, time-of-day lock, and a seed. Locks-front ordering is enforced
 by the auditor, not by convention.
 
+## HTTP API (serve)
+
+`pip install -e ".[api]"`, then serve the lanes over HTTP (one GPU job at a
+time, `x-agent-secret` auth on every route):
+
+```bash
+CONTINUITY_SECRET=... python -m continuity.api.serve   # binds :8191
+```
+
+Deployed live behind the team gateway — public JSON surface:
+
+```bash
+API="https://n8n.babcockranchdirectory.com/webhook/continuity"
+SECRET="<x-agent-secret value>"
+
+# health (GPU present, VRAM free)
+curl -X POST "$API?action=health" -H "x-agent-secret: $SECRET"
+
+# render a keyframe deck (beats.json content in the body; limit trims the deck)
+curl -X POST "$API?action=runs/keyframe" -H "x-agent-secret: $SECRET" \
+     -H 'content-type: application/json' \
+     -d '{"deck": {…beats.json…}, "prefix": "demo", "limit": 1}'
+# -> {"run_id":"df206953","status_url":"/runs/df206953"}
+
+# poll until status=done — manifest carries file paths + sha1 per beat
+curl -X POST "$API?action=runs/df206953" -H "x-agent-secret: $SECRET"
+
+# mint a clip from a rendered keyframe (same pattern, kind=mint)
+curl -X POST "$API?action=runs/mint" -H "x-agent-secret: $SECRET" \
+     -H 'content-type: application/json' \
+     -d '{"beat_id":"D5_whiteout","deck":{…},"keyframe_path":"…png",
+          "camera":"lateral_track","vseed":2301}'
+```
+
+Gateway notes: the public proxy speaks JSON (submit + poll + results);
+binary artifacts (`/files/<path>`) are served by the box directly on the
+private network. Every failed gate aborts before GPU time is spent
+(`no_gpu_spent: true` in the run record).
+
 ## License
 
 MIT — code. Model weights keep their own licenses (FLUX.1-dev, LTX-2.5).

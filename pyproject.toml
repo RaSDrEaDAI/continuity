@@ -18,6 +18,7 @@ dependencies = [
 
 [project.optional-dependencies]
 auditor = ["transformers>=4.40"]
+api = ["fastapi>=0.110", "uvicorn>=0.29", "pydantic>=2"]
 dev = ["pytest>=8.0"]
 
 [project.scripts]
