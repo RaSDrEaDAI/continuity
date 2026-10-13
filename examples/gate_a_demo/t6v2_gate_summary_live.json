@@ -1,0 +1,27 @@
+{
+ "manifest": "D:\\3.AIProjs\\2.Hermes\\hermes-agent\\tmp_work\\comfy_challenge\\t6v2_out\\cont4v2_manifest.json",
+ "gated": 8,
+ "passed": 2,
+ "failed": [
+  "D1_depart",
+  "D3_horizon",
+  "D5_whiteout",
+  "D6_find",
+  "D7_camp",
+  "D8_arrive"
+ ],
+ "all_pass": false,
+ "instrument_version": "gate-a/1",
+ "provider": "openai-compat:anthropic/claude-haiku-5.5",
+ "gated_at": "2026-10-13T01:19:39+00:00",
+ "reports": {
+  "D1_depart": "D:\\3.AIProjs\\2.Hermes\\hermes-agent\\tmp_work\\comfy_challenge\\t6v2_gate\\D1_depart.gate_a.json",
+  "D2_bootmacro": "D:\\3.AIProjs\\2.Hermes\\hermes-agent\\tmp_work\\comfy_challenge\\t6v2_gate\\D2_bootmacro.gate_a.json",
+  "D3_horizon": "D:\\3.AIProjs\\2.Hermes\\hermes-agent\\tmp_work\\comfy_challenge\\t6v2_gate\\D3_horizon.gate_a.json",
+  "D4_signal": "D:\\3.AIProjs\\2.Hermes\\hermes-agent\\tmp_work\\comfy_challenge\\t6v2_gate\\D4_signal.gate_a.json",
+  "D5_whiteout": "D:\\3.AIProjs\\2.Hermes\\hermes-agent\\tmp_work\\comfy_challenge\\t6v2_gate\\D5_whiteout.gate_a.json",
+  "D6_find": "D:\\3.AIProjs\\2.Hermes\\hermes-agent\\tmp_work\\comfy_challenge\\t6v2_gate\\D6_find.gate_a.json",
+  "D7_camp": "D:\\3.AIProjs\\2.Hermes\\hermes-agent\\tmp_work\\comfy_challenge\\t6v2_gate\\D7_camp.gate_a.json",
+  "D8_arrive": "D:\\3.AIProjs\\2.Hermes\\hermes-agent\\tmp_work\\comfy_challenge\\t6v2_gate\\D8_arrive.gate_a.json"
+ }
+}

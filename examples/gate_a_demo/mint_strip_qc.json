@@ -1,0 +1,18 @@
+{
+ "D2_bootmacro": {
+  "answer": "Looking at the 8-frame strip:\n\n(1) STYLE: YES. All frames share the same flat, cel-shaded 2D look with bold outlines, muted sandy-yellow sky, and retro anime-style rendering.\n\n(2) SUBJECT: YES. Each frame shows one brown leather boot with laces and a trouser leg, on a cracked pale salt-crust ground. No people, animals, or extra objects are visible.\n\n(3) MOTION: YES. The boot's position and angle shift across frames, showing a stepping or lifting motion. The trouser leg and boot progressively move through the strip, so it is not a frozen still.\n\n(4) CORRUPTION: NO. The boot and trouser anatomy stay coherent, with no melting or warping and no visible text or watermarks.\n\nCLEAN: YES",
+  "meta": {
+   "prompt_tokens": 453,
+   "completion_tokens": 270,
+   "cost_usd": 0.0001803
+  }
+ },
+ "D4_signal": {
+  "answer": "(1) STYLE: YES. The frames share a consistent retro 2D cel-shaded look with bold inked outlines and flat color fills, held across all eight panels.\n\n(2) CAST: YES. Each frame shows exactly one figure, a kneeling man in a pale robe and head covering with a teal face veil, and there are no camels or other figures visible.\n\n(3) MOTION: YES. The man's posture and hand positions shift subtly from frame to frame, and the lighting along the horizon changes slightly, so the strip reads as a moving sequence rather than a single frozen still.\n\n(4) CORRUPTION: NO. The hands are rendered as two distinct hands resting on the radio, with no obvious fusion or extra finger clusters, and I see no melting shapes or stray text. Some fine detail on the hands and the radio is soft at this resolution, so a closer look at full size would be needed to fully rule out minor artifacts.\n\nCLEAN: YES",
+  "meta": {
+   "prompt_tokens": 441,
+   "completion_tokens": 314,
+   "cost_usd": 0.0002011
+  }
+ }
+}
