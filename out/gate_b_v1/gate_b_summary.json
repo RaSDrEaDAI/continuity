@@ -1,0 +1,11 @@
+{
+ "gated": 2,
+ "passed": 1,
+ "failed": [
+  "D4_signal"
+ ],
+ "all_pass": false,
+ "total_cost_usd": 0,
+ "gate_b_version": "gate-b/1",
+ "gated_at": "2026-10-13T13:20:23+00:00"
+}

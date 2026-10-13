@@ -1,0 +1,42 @@
+{
+ "beat": "D4_signal",
+ "clip": "D:/1.AI/Comfy/output/cont6_mint/D4_signal_s1902_00001_.mp4",
+ "seed": null,
+ "verdict": "FAIL",
+ "fails": [
+  "drift: gradual_drift (swing 30.7 maxstep 6.1)"
+ ],
+ "drift": {
+  "luminance": [
+   53.8,
+   55.8,
+   57.4,
+   60.6,
+   66.7,
+   68.8,
+   71.3,
+   72.9,
+   75.0,
+   76.0,
+   78.6,
+   84.5
+  ],
+  "swing": 30.7,
+  "max_step": 6.1,
+  "fail_class": "gradual_drift",
+  "direction_flips": 0
+ },
+ "motion": {
+  "motion_index": 31.49,
+  "frozen": false,
+  "first_frame_drift": 9.58,
+  "ffd_flag": false
+ },
+ "consistency": "skipped: no provider",
+ "usage": {
+  "calls": 0,
+  "cost_usd": 0.0
+ },
+ "gate_b_version": "gate-b/1",
+ "gated_at": "2026-10-13T13:20:23+00:00"
+}

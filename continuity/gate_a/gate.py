@@ -74,6 +74,12 @@ class GateSpec:
         if self.mode not in MODES:
             raise ValueError(f"qc.mode must be one of {MODES}, got {self.mode!r}")
         self.expect = d.get("expect")
+        # Gate B drift scan applicability: the sky-band instrument requires
+        # the top 22% of frame to BE sky. Env macros are tight comps by
+        # definition (background is terrain, not sky) -> default off there;
+        # explicit qc.tod_scan overrides either way (live-run lesson: a boot
+        # macro swung 94.7 on background texture, not time-of-day).
+        self.tod_scan = bool(d.get("tod_scan", self.mode != "env"))
         self.cast = {**_DEFAULT_CAST[self.mode], **(d.get("cast") or {})}
         camel_visible = self.cast.get("camel", 0) > 0
         self.rope_check = bool(d.get("rope_check", camel_visible))

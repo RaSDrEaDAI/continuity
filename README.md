@@ -37,9 +37,9 @@ ordered master + per-shot QC report
 |---|---|---|
 | Token auditor | `continuity/auditor` | done (T3) — T5-exact spans, dead-text flag, ship gate |
 | Keyframe lane | `continuity/keyframe` | done (T4) — gated deck renderer, resume-safe, live 8-beat demo |
-| Gate A | `continuity/gate_a` | skeleton (T5) |
-| Mint lane | `continuity/mint` | skeleton (T6) |
-| Gate B | `continuity/gate_b` | skeleton (T7) |
+| Gate A | `continuity/gate_a` | done (T5) — two-pass solo vision instruments, live 10-frame gate |
+| Mint lane | `continuity/mint` | done (T6) — LTX-2.5 i2v graphs + submit/wait, live mints + perf table |
+| Gate B | `continuity/gate_b` | done (T7) — drift/motion/consistency + re-roll loop + master assembly |
 | Orchestrator | `continuity/orchestrator` | skeleton |
 | API surface | `continuity/api` | skeleton (T8) |
 

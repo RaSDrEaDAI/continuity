@@ -1,0 +1,21 @@
+{
+ "beat": "D2_bootmacro",
+ "clip": "D:/1.AI/Comfy/output/cont6_mint/D2_bootmacro_s1901_00001_.mp4",
+ "seed": null,
+ "verdict": "PASS",
+ "fails": [],
+ "drift": "skipped: no sky band (macro/CU comp)",
+ "motion": {
+  "motion_index": 21.65,
+  "frozen": false,
+  "first_frame_drift": 7.77,
+  "ffd_flag": false
+ },
+ "consistency": "skipped: no provider",
+ "usage": {
+  "calls": 0,
+  "cost_usd": 0.0
+ },
+ "gate_b_version": "gate-b/1",
+ "gated_at": "2026-10-13T13:20:19+00:00"
+}
