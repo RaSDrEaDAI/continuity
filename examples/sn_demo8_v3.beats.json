@@ -1,5 +1,5 @@
 {
-  "charsheet": "Signal Nomad: skinny desert nomad mid-40s, off-white galabia, ONE all-teal tagelmust scarf, Mujahideen-Bedouin garb: a single continuous teal cloth wrapping his head crown and hanging down over nose and mouth, no white cloth on his head, silver goggles up on the wrap, dark eyes visible, brown harness, backpack with amber brass radio box, copper staff. Static: female dromedary, tan coat, indigo blanket and tack",
+  "charsheet": "Signal Nomad: skinny desert nomad mid-40s, off-white galabia, ONE all-teal tagelmust scarf, Mujahideen-Bedouin garb: a single continuous teal cloth wrapping his head crown and hanging down over nose and mouth, no white cloth on his head, silver goggles up on the wrap, dark eyes visible, brown harness, weathered brown leather backpack, brass radio box strapped to its top, copper staff. Static: female dromedary, tan coat, indigo blanket and tack",
   "style": "Retro 90s anime cel, comic shading, clean linework, 2D, not photoreal, not 3D. No text or logos",
   "model": {
     "unet": "flux1-krea-dev_fp8_scaled.safetensors",
@@ -25,11 +25,11 @@
   "beats": [
     {
       "id": "D1_depart",
-      "seed": 7401,
+      "seed": 7501,
       "locks": [
-        "both walk RIGHT side by side, heads and noses pointing right, gaze straight ahead; no rope or tether, halter bare, she follows free; exactly one man one camel, no other people or animals"
+        "both walk RIGHT, heads and noses pointing right, gaze straight ahead; no rope or tether, halter bare, she follows free; exactly one man one camel, no other people or animals"
       ],
-      "scene": "SCENE: extreme far telephoto, two travelers tiny on a salt flat, cracked crust to a dry horizon, no water, no sea, no lake, violet shadows",
+      "scene": "SCENE: extreme far telephoto, two travelers tiny on a salt flat, cracked crust to a dry horizon, no water, no sea, no lake",
       "tod": "low golden dawn light from the right",
       "camera": "lateral_track",
       "qc": {
@@ -43,7 +43,7 @@
     },
     {
       "id": "D2_bootmacro",
-      "seed": 7302,
+      "seed": 7402,
       "locks": [
         "zero people, zero animals, zero rope or cords; only trouser, boot, salt and sky in frame"
       ],
@@ -57,11 +57,11 @@
     },
     {
       "id": "D3_horizon",
-      "seed": 7403,
+      "seed": 7503,
       "locks": [
-        "both halted in profile facing right, far away, thin as matchsticks; exactly one man one camel, no other people or animals; no rope or tether visible at this distance"
+        "both halted in rightward profile, thin as matchsticks; exactly one man one camel, no other people or animals; no rope or tether visible at this distance"
       ],
-      "scene": "SCENE: telephoto heat-stack compression, salt horizon stacked in shimmering bands, the pair tiny and silhouetted on a low ridge, dry salt to the horizon",
+      "scene": "SCENE: telephoto heat-stack compression, salt horizon in shimmering bands, the pair tiny and silhouetted on a low ridge, dry salt to horizon",
       "tod": "heat-shimmer noon haze",
       "camera": "push_in",
       "qc": {
@@ -74,14 +74,14 @@
     },
     {
       "id": "D4_signal",
-      "seed": 7404,
+      "seed": 7504,
       "locks": [
-        "man kneels frontal facing camera, both hands on the brass radio box, five fingers per hand, eyes fixed down on the dials, never at the camera; exactly one man, no other people anywhere, no camel in this frame; exactly one radio box exists; no rope or tether",
+        "man kneels frontal to camera, both hands on the brass radio box, five fingers per hand, eyes down on the dials, never at camera; exactly one man, no other people anywhere, no camel in this frame; exactly one radio box exists, no readable text on its face; no rope or tether",
         "no rope, cord or coiled line anywhere in frame"
       ],
       "charsheet": "Signal Nomad: skinny desert nomad mid-40s, off-white galabia, ONE all-teal tagelmust scarf, Mujahideen-Bedouin garb: a single continuous teal cloth wrapping his head crown and hanging down over nose and mouth, no white cloth on his head, silver goggles up on the wrap, dark eyes visible, brown harness",
-      "scene": "SCENE: the single brass radio box with its warm amber pilot light sits on the ground before him, his open pack lying beside him, his back never in frame, hard noon light on cracked salt",
-      "tod": "hard flat noon light",
+      "scene": "SCENE: the single brass radio box with its amber pilot light sits on the ground before him, his open weathered brown leather pack lying beside him, his back never in frame, hard noon light on cracked salt",
+      "tod": "flat noon light",
       "camera": "static_drift",
       "qc": {
         "mode": "solo_man",
@@ -93,11 +93,11 @@
     },
     {
       "id": "D5_whiteout",
-      "seed": 7405,
+      "seed": 7505,
       "locks": [
-        "both walk RIGHT into whiteout, heads aimed right, far away, half-dissolved in blowing salt; exactly two silhouettes, one man one camel, no third figure-like shape in the glare; no rope or tether"
+        "both walk RIGHT into whiteout, heads aimed right, half-dissolved in blowing salt; exactly two silhouettes, one man one camel, no third figure-like shape in the glare; no rope or tether"
       ],
-      "scene": "SCENE: salt storm whiteout from far across the plain, the pair ghosted in the glare, only their edges holding, plain erased to white",
+      "scene": "SCENE: salt storm whiteout across the plain, the pair ghosted in the glare, edges holding, plain white",
       "tod": "blown-out white glare",
       "camera": "lateral_track",
       "qc": {
@@ -111,12 +111,12 @@
     },
     {
       "id": "D6_find",
-      "seed": 7406,
+      "seed": 7506,
       "locks": [
         "man kneels frontal at a split salt tile, both hands spreading wide over the crack, five fingers per hand, eyes fixed down on the seam; exactly one man, no other people anywhere, no camel in this frame; no rope or tether",
         "no rope, cord or coiled line anywhere in frame"
       ],
-      "scene": "SCENE: a jagged seam splits the crust, warm light bleeding up from below, cracked salt tiles to a dry horizon",
+      "scene": "SCENE: a jagged seam splits the crust, warm light bleeding up from below, empty cracked salt to a dry horizon",
       "tod": "amber under-glow against dusk blue",
       "camera": "push_in",
       "qc": {
@@ -126,16 +126,16 @@
           "camel": 0
         }
       },
-      "charsheet": "Signal Nomad: skinny desert nomad mid-40s, off-white galabia, ONE all-teal tagelmust scarf, Mujahideen-Bedouin garb: a single continuous teal cloth wrapping his head crown and hanging down over nose and mouth, no white cloth on his head, silver goggles up on the wrap, dark eyes visible, brown harness, backpack with amber brass radio box, copper staff"
+      "charsheet": "Signal Nomad: skinny desert nomad mid-40s, off-white galabia, ONE all-teal tagelmust scarf, Mujahideen-Bedouin garb: a single continuous teal cloth wrapping his head crown and hanging down over nose and mouth, no white cloth on his head, silver goggles up on the wrap, dark eyes visible, brown harness, "
     },
     {
       "id": "D7_camp",
-      "seed": 7407,
+      "seed": 7507,
       "locks": [
-        "man sits cross-legged frontal by a small fire, hands loose in his lap, five fingers each, the single brass radio box beside him glowing amber, eyes on the flames; zero camels and zero animals anywhere; no rope or tether anywhere"
+        "man sits cross-legged frontal by a small fire, hands loose in his lap, five fingers each, the single brass radio box beside him glowing amber, eyes on the flames; zero camels and zero animals anywhere; no rope or tether anywhere; radio box whole and unburned, fire burns only in its stick ring"
       ],
       "charsheet": "Signal Nomad: skinny desert nomad mid-40s, off-white galabia, ONE all-teal tagelmust scarf, Mujahideen-Bedouin garb: a single continuous teal cloth wrapping his head crown and hanging down over nose and mouth, no white cloth on his head, silver goggles up on the wrap, dark eyes visible, brown harness",
-      "scene": "SCENE: night camp, small fire, vast star field overhead, empty salt plain silver at the fire rim to a dark empty horizon",
+      "scene": "SCENE: night camp, a small scrub-stick campfire beside him, his brass radio box intact at his other hand, amber pilot light glowing, vast star field overhead, empty salt plain, dark horizon",
       "tod": "firelight night, deep blue above",
       "camera": "static_drift",
       "qc": {
@@ -148,11 +148,11 @@
     },
     {
       "id": "D8_arrive",
-      "seed": 7408,
+      "seed": 7508,
       "locks": [
-        "both walk TOWARD the camera in three quarter view, bodies aimed at the viewer, far away, gaze ahead; no rope or tether, halter bare, she follows free; exactly one man one camel, no other people or animals"
+        "both walk TOWARD camera in three quarter view, bodies toward viewer, far away, gaze ahead; no rope or tether, halter bare, she follows free; exactly one man one camel, no other people or animals"
       ],
-      "scene": "SCENE: far across the plain a green palm cluster stands dark against dusk, two travelers tiny in mid-ground walking toward it, cracked salt, no water visible",
+      "scene": "SCENE: far off a green palm cluster stands dark against dusk, two travelers tiny in mid-ground walking toward it, cracked salt, no water visible",
       "tod": "deep gold dusk",
       "camera": "retreating_follow",
       "qc": {
