@@ -41,7 +41,7 @@ ordered master + per-shot QC report
 | Mint lane | `continuity/mint` | done (T6) — LTX-2.5 i2v graphs + submit/wait, live mints + perf table |
 | Gate B | `continuity/gate_b` | done (T7) — drift/motion/consistency + re-roll loop + master assembly |
 | Orchestrator | `continuity/orchestrator` | skeleton |
-| API surface | `continuity/api` | skeleton (T8) |
+| API surface | `continuity/api` | done (T8) — FastAPI serve (health/runs/mint/files), live behind gateway proxy |
 
 ## Quickstart (fresh clone)
 
