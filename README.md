@@ -122,6 +122,13 @@ binary artifacts (`/files/<path>`) are served by the box directly on the
 private network. Every failed gate aborts before GPU time is spent
 (`no_gpu_spent: true` in the run record).
 
+## Demo video
+
+Watch the self-QC loop work — gate condemnations, the prompt respec, and the
+gate-passed mints, in 62 seconds:
+
+**https://res.cloudinary.com/dg1lb4q9o/video/upload/v1791939296/projects/comfy-challenge/t9_demo_v1.mp4**
+
 ## License
 
 MIT — code. Model weights keep their own licenses (FLUX.1-dev, LTX-2.5).
