@@ -167,3 +167,201 @@ def submit_and_wait(endpoint: str, graph: dict, client_id: str = "continuity-min
                     "outputs": outputs, "error": err, "prompt_id": prompt_id}
     return {"wall_s": round(time.time() - t0, 1), "vram_end_gb": vram_free_gb(endpoint),
             "outputs": [], "error": "timeout", "prompt_id": prompt_id}
+
+
+# ── Single-shot bounded mint (T12 dispatch route) ────────────────────────────
+#
+# One beat, one keyframe, one clip — a bounded execution unit the RasOrchestrator
+# Comfy runner can invoke as `python -m continuity.cli mint ...` with a fixed
+# argv and a machine-readable result file. No orchestration, no repair loops
+# (that is the T15 pipeline); this is the smallest validated execution route.
+
+# Exit codes (stable contract for the dispatcher)
+EXIT_OK = 0
+EXIT_USAGE = 2          # bad args / missing files — no GPU time spent
+EXIT_GATE_REFUSED = 3   # Gate A says this beat's keyframe is dirty — never mint
+EXIT_GPU_BUSY = 4       # VRAM floor not met — dispatcher should retry later
+EXIT_RENDER_FAILED = 5  # ComfyUI error / timeout / no output
+
+VRAM_FLOOR_GB = 8.0
+
+
+def _comfy_output_root() -> str:
+    """Where THIS ComfyUI writes outputs (config via env; two known roots)."""
+    for env in ("CONTINUITY_COMFY_OUTPUT", "COMFY_OUTPUT"):
+        p = os.environ.get(env)
+        if p and os.path.isdir(p):
+            return p
+    for p in (r"D:\1.AI\Comfy\output", r"D:\1.AI\Comfy\ComfyUI\output"):
+        if os.path.isdir(p):
+            return p
+    return r"D:\1.AI\Comfy\output"
+
+
+def _resolve_keyframe(manifest_path: str, beat_id: str) -> tuple[str, str]:
+    """Return (abs keyframe path, manifest prompt) for a beat, or raise ValueError."""
+    with open(manifest_path, "r", encoding="utf-8") as fh:
+        manifest = json.load(fh)
+    entry = manifest.get(beat_id)
+    if not isinstance(entry, dict):
+        raise ValueError(
+            f"beat '{beat_id}' not in manifest {manifest_path} "
+            f"(have: {', '.join(list(manifest)[:12])})")
+    rel = entry.get("file")
+    if not rel:
+        raise ValueError(f"beat '{beat_id}' has no rendered keyframe (file=null — "
+                         f"render the deck first)")
+    candidates = [rel] if os.path.isabs(rel) else [
+        os.path.join(os.path.dirname(os.path.abspath(manifest_path)), rel),
+        os.path.join(_comfy_output_root(), rel),
+    ]
+    for c in candidates:
+        if os.path.isfile(c):
+            return os.path.abspath(c), entry.get("prompt") or ""
+    raise ValueError(f"keyframe for '{beat_id}' not found on disk: {rel}")
+
+
+def _gate_verdict(gate_report_path: str, beat_id: str) -> str:
+    """Read a Gate A report dir/JSON; return 'PASS'|'FAIL'|'NO_REPORT'.
+
+    Accepts either the summary JSON (has 'reports'/per-beat verdicts) or a
+    directory containing per-beat verdict files.
+    """
+    p = gate_report_path
+    if os.path.isdir(p):
+        import glob as _glob
+        hits = _glob.glob(os.path.join(p, f"*{beat_id}*"))
+        if not hits:
+            return "NO_REPORT"
+        p = hits[0]
+    if not os.path.isfile(p):
+        return "NO_REPORT"
+    try:
+        with open(p, "r", encoding="utf-8") as fh:
+            d = json.load(fh)
+    except Exception:
+        return "NO_REPORT"
+    if isinstance(d, dict):
+        # summary form: {"verdicts": {beat: {...verdict}}} or per-beat file {verdict}
+        for holder in (d.get("verdicts"), d.get("reports"), d):
+            if isinstance(holder, dict) and beat_id in holder:
+                v = holder[beat_id]
+                v = v.get("verdict") if isinstance(v, dict) else v
+                return str(v).upper() if v else "NO_REPORT"
+        if d.get("beat") == beat_id and d.get("verdict"):
+            return str(d["verdict"]).upper()
+    return "NO_REPORT"
+
+
+def mint_one(manifest_path: str, beats_path: str, beat_id: str, seed: int,
+             endpoint: str = "http://127.0.0.1:8189", out_dir: str = ".",
+             duration_s: float | None = None, width: int | None = None,
+             height: int | None = None, gate_a_report: str | None = None,
+             vram_floor_gb: float = VRAM_FLOOR_GB,
+             _upload=None, _submit=None) -> dict:
+    """Mint ONE clip from a manifest keyframe. Bounded, single-shot, honest.
+
+    Returns a result dict (also the shape written by the CLI to --result-json):
+      {ok, exit_code, beat, seed, reason?, clip?, comfy_clip?, wall_s?,
+       vram_end_gb?, frames?, width?, height?, camera?, prompt?, gate_a?}
+    Never raises for expected failures — the caller (CLI/dispatcher) checks
+    result["ok"] and result["exit_code"].
+    """
+    from continuity.keyframe.lane import load_deck
+
+    def _res(ok: bool, code: int, **kw) -> dict:
+        return {"ok": ok, "exit_code": code, "beat": beat_id, "seed": seed, **kw}
+
+    # 1. Resolve inputs (no GPU touched before this succeeds)
+    try:
+        deck = load_deck(beats_path)
+    except Exception as e:  # noqa: BLE001
+        return _res(False, EXIT_USAGE, reason=f"deck load failed: {e}")
+    beat = next((b for b in deck.beats if b.id == beat_id), None)
+    if beat is None:
+        return _res(False, EXIT_USAGE,
+                    reason=f"beat '{beat_id}' not in deck {beats_path}")
+    try:
+        keyframe, _kf_prompt = _resolve_keyframe(manifest_path, beat_id)
+    except ValueError as e:
+        return _res(False, EXIT_USAGE, reason=str(e))
+
+    # 2. Gate A enforcement (opt-in via --gate-a-report; FAIL never mints)
+    gate_state = "not_enforced"
+    if gate_a_report:
+        verdict = _gate_verdict(gate_a_report, beat_id)
+        if verdict == "FAIL":
+            return _res(False, EXIT_GATE_REFUSED,
+                        reason=f"Gate A verdict FAIL for '{beat_id}' — dirty frames never mint",
+                        gate_a="enforced-FAIL")
+        gate_state = f"enforced-{verdict}"
+
+    # 3. Spec + prompt (camera grammar mandatory — static-only prompts freeze)
+    camera = beat.camera or "static_drift"
+    scene_text = "; ".join([*(beat.locks or []), beat.scene or "",
+                            beat.tod or ""]).strip(" ;")
+    spec = MintSpec(beat_id=beat_id, keyframe_path=keyframe, camera=camera,
+                    duration_s=duration_s if duration_s else 12.25,
+                    width=width or 1248, height=height or 704,
+                    seed=int(seed))
+    prompt = build_mint_prompt(spec, scene_text)
+
+    upload = _upload or upload_keyframe
+    submit = _submit or submit_and_wait
+    endpoint = endpoint.rstrip("/")
+
+    # 4. VRAM floor — a busy GPU returns GPU_BUSY, not a 30-min hang
+    try:
+        free = vram_free_gb(endpoint)
+    except Exception as e:  # noqa: BLE001
+        return _res(False, EXIT_RENDER_FAILED,
+                    reason=f"ComfyUI unreachable at {endpoint}: {e}")
+    if free < vram_floor_gb:
+        return _res(False, EXIT_GPU_BUSY,
+                    reason=f"vram_free {free}GB < floor {vram_floor_gb}GB at {endpoint}",
+                    vram_free_gb=free)
+
+    # 5. Upload keyframe -> build graph -> submit
+    try:
+        upload_name = upload(endpoint, keyframe)
+    except Exception as e:  # noqa: BLE001
+        return _res(False, EXIT_RENDER_FAILED, reason=f"keyframe upload failed: {e}")
+    prefix = f"cont_mint_{beat_id}"
+    graph = build_i2v_graph(spec, prompt, upload_name, filename_prefix=prefix)
+    r = submit(endpoint, graph)
+    if r.get("error"):
+        err_txt = str(r["error"])[:400]
+        return _res(False, EXIT_RENDER_FAILED,
+                    reason=f"render error: {err_txt}",
+                    wall_s=r.get("wall_s"), vram_end_gb=r.get("vram_end_gb"))
+
+    # 6. Locate the clip (ComfyUI writes under its own output root)
+    clip_rel = None
+    for _node, fname, sub, _t in r.get("outputs", []):
+        if fname and str(fname).lower().endswith((".mp4", ".webm", ".mkv")):
+            clip_rel = os.path.join(sub, fname) if sub else fname
+            break
+    if not clip_rel:
+        return _res(False, EXIT_RENDER_FAILED,
+                    reason="render finished but no video output found in history",
+                    wall_s=r.get("wall_s"))
+    root = _comfy_output_root()
+    comfy_clip = clip_rel if os.path.isabs(clip_rel) else os.path.join(root, clip_rel)
+    if not os.path.isfile(comfy_clip):
+        # ComfyUI output-root mismatch — recorded, surfaced, not guessed
+        comfy_clip = os.path.join(r"D:\1.AI\Comfy\ComfyUI\output", clip_rel)
+        if not os.path.isfile(comfy_clip):
+            return _res(False, EXIT_RENDER_FAILED,
+                        reason=f"clip not on disk under output roots: {clip_rel}",
+                        wall_s=r.get("wall_s"))
+
+    os.makedirs(out_dir, exist_ok=True)
+    clip_out = os.path.abspath(
+        os.path.join(out_dir, f"{prefix}_s{seed}.mp4"))
+    import shutil
+    shutil.copyfile(comfy_clip, clip_out)
+    return _res(True, EXIT_OK, clip=clip_out, comfy_clip=os.path.abspath(comfy_clip),
+                wall_s=r.get("wall_s"), vram_end_gb=r.get("vram_end_gb"),
+                frames=spec.length, width=spec.width, height=spec.height,
+                camera=camera, prompt=prompt, gate_a=gate_state,
+                endpoint=endpoint, vram_start_gb=free)

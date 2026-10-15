@@ -15,7 +15,6 @@ def build_parser() -> argparse.ArgumentParser:
     sub = p.add_subparsers(dest="stage")
 
     sub.add_parser("audit", help="T3: T5 token audit + locks-front ship gate")
-    sub.add_parser("mint", help="T6: keyframes -> LTX-2.5 i2v clips")
 
     audit_p = sub.add_parser("audit-text", help="quick audit of one prompt string")
     audit_p.add_argument("--text", required=True)
@@ -70,6 +69,26 @@ def build_parser() -> argparse.ArgumentParser:
     run_p.add_argument("--beats", required=True, help="path to beats.json")
     run_p.add_argument("--charsheet", help="path to charsheet prompt block")
     run_p.add_argument("--dry-run", action="store_true", help="plan without rendering")
+
+    mint_p = sub.add_parser("mint", help="T6: mint ONE clip from a manifest keyframe")
+    mint_p.add_argument("--manifest", required=True,
+                        help="T4 keyframe manifest (beat -> rendered frame)")
+    mint_p.add_argument("--beats", required=True, help="deck JSON (camera/locks/qc)")
+    mint_p.add_argument("--beat", required=True, help="beat id to mint")
+    mint_p.add_argument("--seed", type=int, required=True, help="video seed")
+    mint_p.add_argument("--endpoint", default="http://127.0.0.1:8189",
+                        help="ComfyUI API surface (local 8188/8189)")
+    mint_p.add_argument("--out", default="./out_mint", help="output dir for the clip")
+    mint_p.add_argument("--duration", type=float, default=None,
+                        help="clip length seconds (default 12.25)")
+    mint_p.add_argument("--width", type=int, default=None, help="default 1248")
+    mint_p.add_argument("--height", type=int, default=None, help="default 704")
+    mint_p.add_argument("--gate-a-report", default=None,
+                        help="Gate A report dir/JSON; a FAIL verdict refuses the mint")
+    mint_p.add_argument("--result-json", default=None,
+                        help="write the machine-readable result here (dispatcher contract)")
+    mint_p.add_argument("--vram-floor", type=float, default=8.0,
+                        help="refuse below this vram_free GB (default 8)")
 
     return p
 
@@ -186,6 +205,29 @@ def main(argv=None) -> int:
                 print(f"master: {m['master']} "
                       f"(included {len(m['included'])}, excluded {len(m['excluded'])})")
         return 0 if summary["all_pass"] else 1
+
+    if args.stage == "mint":
+        from continuity.mint.lane import mint_one
+        result = mint_one(
+            manifest_path=args.manifest, beats_path=args.beats, beat_id=args.beat,
+            seed=args.seed, endpoint=args.endpoint, out_dir=args.out,
+            duration_s=args.duration, width=args.width, height=args.height,
+            gate_a_report=args.gate_a_report, vram_floor_gb=args.vram_floor,
+        )
+        if args.result_json:
+            import json as _j
+            import os as _os
+            _os.makedirs(_os.path.dirname(_os.path.abspath(args.result_json)), exist_ok=True)
+            with open(args.result_json, "w", encoding="utf-8") as fh:
+                _j.dump(result, fh, indent=1)
+        if result["ok"]:
+            print(f"minted {result['beat']} s{result['seed']}: {result['clip']} "
+                  f"({result.get('frames')}f, {result.get('wall_s')}s, "
+                  f"vram_end {result.get('vram_end_gb')}GB)")
+        else:
+            print(f"MINT REFUSED/FAILED [{result['exit_code']}]: {result.get('reason')}",
+                  file=sys.stderr)
+        return result["exit_code"]
 
     print(f"stage '{args.stage}' wired; module implementation lands with its ticket "
           f"(see README status table)")
