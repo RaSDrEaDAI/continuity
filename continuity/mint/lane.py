@@ -258,7 +258,7 @@ def mint_one(manifest_path: str, beats_path: str, beat_id: str, seed: int,
              duration_s: float | None = None, width: int | None = None,
              height: int | None = None, gate_a_report: str | None = None,
              vram_floor_gb: float = VRAM_FLOOR_GB,
-             _upload=None, _submit=None) -> dict:
+             prompt_suffix: str = "", _upload=None, _submit=None) -> dict:
     """Mint ONE clip from a manifest keyframe. Bounded, single-shot, honest.
 
     Returns a result dict (also the shape written by the CLI to --result-json):
@@ -305,6 +305,10 @@ def mint_one(manifest_path: str, beats_path: str, beat_id: str, seed: int,
                     width=width or 1248, height=height or 704,
                     seed=int(seed))
     prompt = build_mint_prompt(spec, scene_text)
+    if prompt_suffix:
+        # hardened re-mint grammar (Gate B failure classes) — appended, never
+        # replacing the base prompt
+        prompt = f"{prompt}; {prompt_suffix}"
 
     upload = _upload or upload_keyframe
     submit = _submit or submit_and_wait

@@ -40,7 +40,7 @@ ordered master + per-shot QC report
 | Gate A | `continuity/gate_a` | done (T5) — two-pass solo vision instruments, live 10-frame gate |
 | Mint lane | `continuity/mint` | done (T6) — LTX-2.5 i2v graphs + submit/wait, live mints + perf table |
 | Gate B | `continuity/gate_b` | done (T7) — drift/motion/consistency + re-roll loop + master assembly |
-| Orchestrator | `continuity/orchestrator` | skeleton |
+| Orchestrator | `continuity/orchestrator` | done (T15) — end-to-end `continuity run`: audit → keyframe → Gate A → mint → Gate B → bounded repair → master; persisted run state, hash-validated resume, Gate A enforced before every mint (CLI + serve API) |
 | API surface | `continuity/api` | done (T8) — FastAPI serve (health/runs/mint/files), live behind gateway proxy |
 
 ## Quickstart (fresh clone)
@@ -75,6 +75,22 @@ Try the pipeline surface without a GPU:
 continuity audit --text "exactly one camel, zero people, wide salt flat, dawn light"
 continuity run --beats examples/beats.example.json --dry-run
 ```
+
+Full pipeline on a live Comfy endpoint (exact T5 tokenizer required; the
+dry-run estimate is labeled and never gates production):
+
+```bash
+continuity run --beats examples/sn_demo8_v2.beats.json \
+  --tokenizer <t5_tokenizer_path> --limit 2 --duration 5.04 \
+  --width 960 --height 544 --out-root runs
+# → runs/<id>/{state.json, report.md, gate_a/, gate_b/, clips/, master.mp4}
+# resume after a pause or a crash: add --resume runs/<id>
+```
+
+Every mint carries its Gate A verdict (a FAIL or missing verdict refuses the
+mint — the serve API enforces the same rule). The master declares any missing
+beat instead of silently dropping it, and the run report records wall time,
+GPU seconds, vision cost, retries and every operator escalation.
 
 ## Beat list format
 

@@ -65,10 +65,34 @@ def build_parser() -> argparse.ArgumentParser:
     gb_p.add_argument("--samples", type=int, default=12,
                       help="consistency samples per clip (~1fps)")
 
-    run_p = sub.add_parser("run", help="orchestrate the full pipeline")
+    run_p = sub.add_parser("run", help="orchestrate the full pipeline (T15)")
     run_p.add_argument("--beats", required=True, help="path to beats.json")
-    run_p.add_argument("--charsheet", help="path to charsheet prompt block")
-    run_p.add_argument("--dry-run", action="store_true", help="plan without rendering")
+    run_p.add_argument("--charsheet", default=None,
+                       help="charsheet IMAGE path (Gate A scale probe; the "
+                            "deck charsheet text is the identity block)")
+    run_p.add_argument("--out-root", default="runs", help="run dir root")
+    run_p.add_argument("--endpoint", default="http://127.0.0.1:8189")
+    run_p.add_argument("--tokenizer", default=None,
+                       help="T5 tokenizer path (REQUIRED unless --dry-run)")
+    run_p.add_argument("--dry-run", action="store_true",
+                       help="audit + plan only: no GPU, no network calls")
+    run_p.add_argument("--limit", type=int, default=None,
+                       help="only the first N beats")
+    run_p.add_argument("--prefix", default="cont15",
+                       help="keyframe filename prefix (resume matches on it)")
+    run_p.add_argument("--vseed-base", type=int, default=3001)
+    run_p.add_argument("--duration", type=float, default=12.25)
+    run_p.add_argument("--width", type=int, default=1248)
+    run_p.add_argument("--height", type=int, default=704)
+    run_p.add_argument("--vram-floor", type=float, default=8.0)
+    run_p.add_argument("--max-mint-rounds", type=int, default=2)
+    run_p.add_argument("--replay", default=None,
+                       help="Gate A replay answers JSON (offline)")
+    run_p.add_argument("--no-gate-b-vision", action="store_true",
+                       help="Gate B deterministic instruments only")
+    run_p.add_argument("--resume", default=None,
+                       help="path to an existing run dir to resume")
+    run_p.add_argument("--run-id", default=None, help="name the run dir")
 
     mint_p = sub.add_parser("mint", help="T6: mint ONE clip from a manifest keyframe")
     mint_p.add_argument("--manifest", required=True,
@@ -229,9 +253,52 @@ def main(argv=None) -> int:
                   file=sys.stderr)
         return result["exit_code"]
 
-    print(f"stage '{args.stage}' wired; module implementation lands with its ticket "
-          f"(see README status table)")
-    return 0
+    if args.stage == "run":
+        from continuity.orchestrator.pipeline import (
+            PipelineConfig, UsageError, run as pipeline_run,
+        )
+        from continuity.keyframe.lane import ShipGateError as _SGE
+        config = PipelineConfig(
+            beats_path=args.beats, charsheet_path=args.charsheet,
+            out_root=args.out_root, endpoint=args.endpoint,
+            tokenizer_path=args.tokenizer, dry_run=args.dry_run,
+            limit=args.limit, prefix=args.prefix,
+            video_seed_base=args.vseed_base, duration_s=args.duration,
+            width=args.width, height=args.height,
+            vram_floor_gb=args.vram_floor,
+            max_mint_rounds=args.max_mint_rounds,
+            gate_a_replay=args.replay,
+            gate_b_vision=not args.no_gate_b_vision,
+            resume_run_dir=args.resume, run_id=args.run_id)
+        try:
+            summary = pipeline_run(config)
+        except (UsageError, _SGE) as exc:
+            print(f"ABORTED (no GPU time spent): {exc}", file=sys.stderr)
+            return 2
+        statuses = summary["statuses"]
+        for bid, st in statuses.items():
+            print(f"  {bid}: {st}")
+        print(f"state: {summary['state_path']}")
+        if summary.get("master"):
+            m = summary["master"]
+            note = (" — DECLARED INCOMPLETE: "
+                    + ", ".join(x["beat"] for x in m.get("missing_beats", []))
+                    if m.get("declared_incomplete") else "")
+            print(f"master: {m['master']} ({len(m['included'])} shots)"
+                  f"{note}")
+        u = summary["usage"]
+        print(f"wall {u.get('wall_s')}s · gpu {u.get('gpu_seconds')}s · "
+              f"vision ${u.get('vision_cost_usd')} · retries {u.get('retries')}"
+              + (f" · interventions {len(u.get('human_interventions', []))}"
+                 if u.get("human_interventions") else ""))
+        if summary["paused"]:
+            print("run PAUSED (GPU busy) — resume with --resume <run_dir>",
+                  file=sys.stderr)
+            return 1
+        return 0 if summary["ok"] else 1
+
+    print(f"stage '{args.stage}' is not implemented", file=sys.stderr)
+    return 2
 
 
 if __name__ == "__main__":

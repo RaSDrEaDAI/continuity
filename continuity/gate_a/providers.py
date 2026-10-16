@@ -91,7 +91,14 @@ class OpenAICompatProvider:
             # as None -> every instrument "unusable". Disabling reasoning
             # (plus a 700-token budget for segment inventories) yields
             # clean, parseable answers.
-            body["reasoning"] = {"enabled": False}
+            if "api.z.ai" in self.base_url or "bigmodel.cn" in self.base_url:
+                # zai/GLM wants a different body key (measured Oct 14 2026):
+                # without thinking-off, glm-4.6v returns HTTP 200 with EMPTY
+                # content at finish=length after burning ~4600 reasoning
+                # tokens. Same disease, different header.
+                body["thinking"] = {"type": "disabled"}
+            else:
+                body["reasoning"] = {"enabled": False}
         req = urllib.request.Request(
             self.base_url + "/chat/completions",
             data=json.dumps(body).encode(),

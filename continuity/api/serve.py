@@ -100,6 +100,10 @@ class MintReq(BaseModel):
     beat_id: str
     deck: dict            # same beats.json content (for beat scene text)
     keyframe_path: str
+    gate_a_report: str    # REQUIRED (fail-closed): Gate A verdict file/dir;
+                          # the report must show PASS for THIS beat AND name
+                          # THIS exact keyframe file. Arbitrary path-only
+                          # mints are rejected — dirty frames never mint.
     camera: str = "lateral_track"
     vseed: int = 2301
     duration_s: float = 12.25
@@ -153,8 +157,30 @@ def load_deck_dict(d: dict) -> Deck:
     return load_deck(path)
 
 
+def _gated_frame_path(gate_a_report: str, beat_id: str) -> str | None:
+    """Frame path recorded in the Gate A verdict for this beat, if any."""
+    import glob as _glob
+    p = gate_a_report
+    if os.path.isdir(p):
+        hits = _glob.glob(os.path.join(p, f"*{beat_id}*"))
+        if not hits:
+            return None
+        p = hits[0]
+    if not os.path.isfile(p):
+        return None
+    try:
+        with open(p, "r", encoding="utf-8") as fh:
+            d = json.load(fh)
+        if isinstance(d, dict) and d.get("beat") == beat_id:
+            return d.get("frame")
+    except Exception:
+        pass
+    return None
+
+
 @app.post("/runs/mint")
 def run_mint(req: MintReq):
+    from continuity.mint.lane import _gate_verdict
     deck = load_deck_dict(req.deck)
     beat = next((b for b in deck.beats if b.id == req.beat_id), None)
     if beat is None:
@@ -162,6 +188,21 @@ def run_mint(req: MintReq):
                                  f"({[b.id for b in deck.beats]})")
     if not Path(req.keyframe_path).exists():
         raise HTTPException(400, f"keyframe_path not found: {req.keyframe_path}")
+    # Gate A enforcement (T15): verdict must be PASS for this beat, and the
+    # gated frame must BE this keyframe (a PASS for a different frame is a
+    # stale report, not an approval). Fail-closed on anything ambiguous.
+    verdict = _gate_verdict(req.gate_a_report, req.beat_id)
+    if verdict != "PASS":
+        raise HTTPException(
+            400, f"Gate A verdict for '{req.beat_id}' is {verdict} — "
+                 f"dirty (or unproven) frames never mint. Pass a Gate A "
+                 f"report showing PASS for this beat.")
+    gated_frame = _gated_frame_path(req.gate_a_report, req.beat_id)
+    if gated_frame and os.path.abspath(gated_frame) != os.path.abspath(req.keyframe_path):
+        raise HTTPException(
+            400, f"Gate A PASS names a different frame ({gated_frame}) than "
+                 f"keyframe_path ({req.keyframe_path}) — stale report; "
+                 f"re-gate this keyframe before minting")
     run_id = str(uuid.uuid4())[:8]
 
     def _mint() -> dict:
