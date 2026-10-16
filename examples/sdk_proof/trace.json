@@ -1,0 +1,55 @@
+{
+ "when_utc": "2026-10-16T15:48:38Z",
+ "redacted": true,
+ "credential_handling": "bearer token via COMFY_API_KEY env only; never serialized into this trace",
+ "versions": {
+  "comfy_sdk": "0.5.0",
+  "comfy_api_proxy": "0.1.6",
+  "adapter": "continuity.api.sdk_endpoint.ComfySdkEndpoint"
+ },
+ "transport": {
+  "base_url": "http://127.0.0.1:8190",
+  "health": {
+   "ok": true,
+   "transport": "comfy-api-v2",
+   "base_url": "http://127.0.0.1:8190",
+   "jobs_visible": 0
+  }
+ },
+ "workflow": {
+  "nodes": [
+   "1",
+   "2",
+   "3",
+   "4"
+  ],
+  "vae_name": "ae.safetensors",
+  "purpose": "T13 minimal real workflow: latent -> decode -> save"
+ },
+ "job": {
+  "job_id": "c52da1d3-511d-4cee-9602-8f205d20833c",
+  "status": "success",
+  "raw_status": "succeeded",
+  "outputs": [
+   {
+    "node_id": "4",
+    "name": "sdk_t13_smoke_00001_.png",
+    "type": "image",
+    "id": "eyJqIjogImM1MmRhMWQzLTUxMWQtNGNlZS05NjAyLThmMjA1ZDIwODMzYyIsICJmIjogInNka190MTNfc21va2VfMDAwMDFfLnBuZyIsICJzIjogIiIsICJ0IjogIm91dHB1dCJ9.3kgseCiF3b5Iao9W4RpXMRogRE4ceU0um1e6N40eJv4",
+    "size_bytes": 0,
+    "content_type": "image/png"
+   }
+  ]
+ },
+ "timing_s": {
+  "submit": 0.62,
+  "to_terminal": 2.52
+ },
+ "downloaded": [
+  {
+   "file": "sdk_t13_smoke_00001_.png",
+   "sha256_16": "36a46aebbf564bc6",
+   "bytes": 7145
+  }
+ ]
+}

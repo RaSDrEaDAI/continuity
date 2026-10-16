@@ -3,10 +3,19 @@
 **One character sheet + a beat list in → a cut, QC-gated multi-shot video sequence out.**
 
 Built for the Comfy Dev Platform Challenge (Open Call, Oct 2026) on top of the
-[Comfy Developer Platform](https://developers.comfy.org) — a local
-`comfy-api-proxy` serves Comfy API v2 in front of our own ComfyUI instance, so
-every workflow runs 100% locally on an RTX 5090 while staying on the official
-API surface.
+[Comfy Developer Platform](https://developers.comfy.org) — the official
+`comfy-sdk` (pinned 0.5.0) drives `comfy-api-proxy` (pinned 0.1.6, Comfy API
+v2) in front of our own ComfyUI instance, so generation runs 100% locally on
+an RTX 5090 while submission, polling and output retrieval stay on the
+official API surface (`continuity/api/sdk_endpoint.py`; redacted live trace in
+`examples/sdk_proof/trace.json`). Native local mode (`/prompt`+`/history`)
+remains the default engine path — the two are explicit, separate modes.
+
+Honest scope notes (full matrix in `docs/eligibility.md`): code is MIT; model
+weights keep their own licenses (FLUX.1-dev is open weights under a
+non-commercial license — this is not an all-OSS stack); deterministic QC
+instruments are local code, while the optional vision passes call a hosted
+provider.
 
 The differentiator is the **self-QC loop**. Generation pipelines fail silently:
 prompts past the T5 token window are dead text, keyframes drift off-canon,
@@ -147,4 +156,7 @@ gate-passed mints, in 62 seconds:
 
 ## License
 
-MIT — code. Model weights keep their own licenses (FLUX.1-dev, LTX-2.5).
+MIT — code only. Model weights keep their own licenses: FLUX.1-dev
+(non-commercial), LTX-2.5, T5 (Apache-2.0), plus locally trained LoRAs. The
+optional hosted vision gates are proprietary services. See
+`docs/eligibility.md` for the full matrix and evidence.

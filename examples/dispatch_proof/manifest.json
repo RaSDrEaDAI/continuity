@@ -1,0 +1,8 @@
+{
+ "D2_bootmacro": {
+  "file": "cont4/D2_bootmacro_s7102_00001_.png",
+  "beat": "D2_bootmacro",
+  "seed": 7102,
+  "camera": "static_drift"
+ }
+}
