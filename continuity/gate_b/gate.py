@@ -34,13 +34,40 @@ def _utcnow() -> str:
     return _dt.datetime.now(_dt.timezone.utc).replace(microsecond=0).isoformat()
 
 
+def _vision_required(spec: GateSpec) -> bool:
+    """A beat needs the vision consistency scan when its validated spec
+    carries a cast/facing contract. Env macros (castless by spec) legitimately
+    skip it — the skip is justified BY the spec, not by provider absence."""
+    cast = getattr(spec, "cast", None) or {}
+    return (bool(getattr(spec, "expect", None))
+            or any((v or 0) > 0 for v in cast.values())
+            or bool(getattr(spec, "facing_subjects", None)))
+
+
 def gate_mint(clip_path: str, beat_id: str, spec: GateSpec, seed: int | None = None,
               keyframe_path: str | None = None, provider=None,
               workdir: str = ".", samples: int = 12) -> dict:
-    """Full Gate B battery on one mint. provider=None skips the vision
-    consistency scan (deterministic-only mode — CI, quick re-checks)."""
+    """Full Gate B battery on one mint.
+
+    Verdicts (T14 fail-closed):
+      PASS          deterministic scans clean AND required coverage present
+      FAIL          a deterministic instrument failed
+      NEEDS_REVIEW  required coverage missing (vision provider absent while
+                    the spec carries a cast/facing contract, or no keyframe
+                    to verify first-frame fidelity) — a non-production
+                    verdict that can never enter a master.
+    """
     os.makedirs(workdir, exist_ok=True)
     fails: list[str] = []
+    coverage_gaps: list[str] = []
+
+    if _vision_required(spec) and provider is None:
+        coverage_gaps.append(
+            "consistency: required vision unavailable (no provider) — "
+            "spec carries a cast/facing contract")
+    if keyframe_path is None:
+        coverage_gaps.append(
+            "first-frame fidelity unverified (no keyframe provided)")
 
     if getattr(spec, "tod_scan", True):
         drift = drift_scan(clip_path, beat_id=beat_id,
@@ -72,8 +99,10 @@ def gate_mint(clip_path: str, beat_id: str, spec: GateSpec, seed: int | None = N
 
     report = {
         "beat": beat_id, "clip": clip_path, "seed": seed,
-        "verdict": "PASS" if not fails else "FAIL",
+        "verdict": ("FAIL" if fails else
+                    "NEEDS_REVIEW" if coverage_gaps else "PASS"),
         "fails": fails,
+        "coverage_gaps": coverage_gaps,
         "drift": ({"luminance": drift.luminance, "swing": drift.swing,
                    "max_step": drift.max_step, "fail_class": drift.fail_class,
                    "direction_flips": drift.direction_flips}
@@ -111,10 +140,14 @@ def resolve_beat(clip_filename: str, spec_ids) -> str:
 
 def summarize(reports: list[dict]) -> dict:
     """Batch summary — the input to master assembly and re-roll routing."""
-    failed = [r["beat"] for r in reports if r["verdict"] != "PASS"]
+    failed = [r["beat"] for r in reports if r["verdict"] == "FAIL"]
+    needs_review = [r["beat"] for r in reports
+                    if r["verdict"] not in ("PASS", "FAIL")]
+    passed = len(reports) - len(failed) - len(needs_review)
     return {
-        "gated": len(reports), "passed": len(reports) - len(failed),
-        "failed": failed, "all_pass": not failed,
+        "gated": len(reports), "passed": passed,
+        "failed": failed, "needs_review": needs_review,
+        "all_pass": not failed and not needs_review,
         "total_cost_usd": round(sum(r.get("usage", {}).get("cost_usd", 0) or 0
                                     for r in reports), 5),
         "gate_b_version": GATE_B_VERSION, "gated_at": _utcnow(),

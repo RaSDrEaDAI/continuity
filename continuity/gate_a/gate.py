@@ -156,14 +156,20 @@ def gate_frame(frame_path: str, spec: GateSpec, provider: VisionProvider,
         if n is not None and n != expected:
             fails.append(f"cast_{kind}: counted {n}, expected {expected}")
 
-    # 4. scale vs charsheet (composite probe image)
+    # 4. scale vs charsheet (composite probe image) — fail CLOSED (T14):
+    # a required scale check without a usable reference is a fail, never a
+    # silent skip; decks that legitimately have no scale contract set
+    # scale_check:false in the validated spec.
     if spec.scale_check and spec.charsheet and os.path.exists(spec.charsheet):
         probe = _scale_probe_image(frame_path, spec.charsheet)
         s = ask(probe, SCALE_PROMPT, "scale", parse_scale, "scale")
         if s is not None and s in ("SMALL", "PONY"):
             fails.append(f"scale: camel reads {s} vs charsheet")
-    elif spec.scale_check and not spec.charsheet:
-        reads["scale"] = ["skipped: no charsheet configured"]
+    elif spec.scale_check:
+        why = ("no charsheet configured" if not spec.charsheet
+               else f"charsheet not found on disk ({spec.charsheet})")
+        reads["scale"] = [f"UNVERIFIABLE: {why}"]
+        fails.append(f"scale: required but unverifiable — {why} (fail closed)")
 
     # 5. gaze (walk wides: zero camera gaze unless explicitly allowed)
     if spec.facing_subjects:

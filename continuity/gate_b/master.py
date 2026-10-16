@@ -46,18 +46,72 @@ def master_concat(clips: list[str], out_path: str, workdir: str = ".") -> str:
     return out_path
 
 
-def assemble_master(reports: list[dict], out_path: str, workdir: str = ".") -> dict:
-    """Gate-B-PASS clips in report order -> master + manifest sidecar."""
-    order = [r for r in reports if r["verdict"] == "PASS"]
-    clips = [r["clip"] for r in order]
+def assemble_master(reports: list[dict], out_path: str, workdir: str = ".",
+                    required_beats: list[str] | None = None,
+                    expected_clip_sha1: dict[str, str] | None = None,
+                    strict: bool = False) -> dict:
+    """Gate-B-PASS clips in report order -> master + manifest sidecar.
+
+    T14 admission validation — a report enters the concat only when:
+      * verdict is exactly PASS (NEEDS_REVIEW/FAIL excluded), AND
+      * its clip exists on disk, AND
+      * its clip sha1 (when the caller recorded one) still matches the file
+        (a changed artifact invalidates the approval behind the verdict).
+
+    Production (strict=True) REFUSES to assemble when any required beat is
+    missing; partial previews (strict=False) assemble and carry a prominent
+    missing_beats list plus is_complete=False.
+    """
+    def _sha1(path: str) -> str | None:
+        try:
+            import hashlib
+            h = hashlib.sha1()
+            with open(path, "rb") as fh:
+                for chunk in iter(lambda: fh.read(1 << 16), b""):
+                    h.update(chunk)
+            return h.hexdigest()
+        except OSError:
+            return None
+
+    admitted: list[dict] = []
+    excluded: list[dict] = []
+    for r in reports:
+        if r["verdict"] != "PASS":
+            excluded.append({"beat": r["beat"],
+                             "why": f"verdict {r['verdict']}: "
+                                    f"{'; '.join(r.get('fails') or r.get('coverage_gaps') or ['not PASS'])}"})
+            continue
+        clip = r.get("clip")
+        exp = (expected_clip_sha1 or {}).get(r["beat"])
+        if not clip or not os.path.exists(clip):
+            excluded.append({"beat": r["beat"],
+                             "why": "PASS but clip missing on disk"})
+            continue
+        if exp:
+            actual = _sha1(clip)
+            if actual != exp:
+                excluded.append({"beat": r["beat"],
+                                 "why": "clip sha1 changed since gate approval "
+                                        f"(expected {exp[:12]}, found {(actual or '?')[:12]})"})
+                continue
+        admitted.append(r)
+
+    order_ids = [r["beat"] for r in admitted]
+    missing = [b for b in (required_beats or []) if b not in order_ids]
+    if strict and missing:
+        raise RuntimeError(
+            f"assemble_master(strict): required beats missing — {missing}; "
+            "partial previews must be assembled with strict=False and listed "
+            "as previews, never shipped as production")
+
+    clips = [r["clip"] for r in admitted]
     master_concat(clips, out_path, workdir)
-    excluded = [
-        {"beat": r["beat"], "why": "; ".join(r["fails"]) or "not PASS"}
-        for r in reports if r["verdict"] != "PASS"]
     return {
         "master": out_path,
-        "included": [r["beat"] for r in order],
+        "included": order_ids,
         "excluded": excluded,
+        "is_complete": not missing,
+        "missing_beats": missing,
         "duration_note": "concat stream-copy; inputs are lane-uniform "
                          "containers (1248x704 h264)",
     }

@@ -565,7 +565,9 @@ def run(config: PipelineConfig) -> dict:
             state.save()
             attempt = strikes["mint"] + 1
             plan = plan_reroll(report, b["clip"]["seed"], attempt=attempt,
-                               tod_class=b["tod_class"])
+                               tod_class=b["tod_class"],
+                               reviewed_sudden_jump=bool(
+                                   b.get("reviewed_sudden_jump")))
             b["rerolls"].append({
                 "from_seed": plan.from_seed, "to_seed": plan.to_seed,
                 "reason": plan.reason, "round": attempt,
@@ -620,7 +622,17 @@ def run(config: PipelineConfig) -> dict:
         reports_by_beat = {r["beat"]: r for r in gate_b_reports}
         ordered = [reports_by_beat[bid] for bid in order if bid in reports_by_beat]
         master_path = os.path.join(run_dir, "master.mp4")
-        m = assemble_master(ordered, master_path, gate_b_dir)
+        # T14: admission carries hash validation + the required-beat list;
+        # the pipeline master is an honest PREVIEW (strict=False) — it never
+        # silently ships a partial story (declared_incomplete below is the
+        # explicit report; production cuts re-assemble with strict=True).
+        hashes = {bid: (summary_beats[bid].get("clip") or {}).get("sha1")
+                  for bid in order
+                  if (summary_beats[bid].get("clip") or {}).get("sha1")}
+        m = assemble_master(ordered, master_path, gate_b_dir,
+                            required_beats=order,
+                            expected_clip_sha1=hashes,
+                            strict=False)
         missing = [bid for bid in order
                    if summary_beats[bid].get("status") != "gate_b_pass"]
         m["declared_incomplete"] = bool(missing)

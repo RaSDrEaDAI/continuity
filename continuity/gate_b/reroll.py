@@ -68,41 +68,97 @@ class RerollPlan:
         return "; ".join(self.grammar)
 
 
+def _strip_gate_prefix(f: str) -> str:
+    """Gate B fails arrive prefixed ('consistency: cast_man: ...'); classify on
+    the inner text (T14: prefixed cast failures were falling through)."""
+    return f.split(": ", 1)[1] if f.startswith("consistency: ") else f
+
+
 def classify_fails(report: dict) -> list[str]:
     """Map a Gate B report's fail strings to HARDENED grammar classes."""
     classes: list[str] = []
     for f in report.get("fails", []):
-        if f.startswith("drift:"):
+        inner = _strip_gate_prefix(f)
+        if inner.startswith("drift:"):
             fc = report.get("drift", {}).get("fail_class", "gradual_drift")
             classes.append(fc if fc else "gradual_drift")
-        elif "FROZEN" in f:
+        elif "FROZEN" in inner:
             classes.append("frozen")
-        elif f.startswith("first-frame drift"):
+        elif inner.startswith("first-frame drift"):
             classes.append("ffd")
-        elif "FLIP mid-clip" in f or "unusable" in f:
+        elif "FLIP mid-clip" in inner or "unusable" in inner:
             classes.append("facing_flip")
-        elif "faces camera" in f:
+        elif "faces camera" in inner:
             classes.append("gaze_camera")
-        elif f.startswith("cast_") or "cast" in f.split(":")[0]:
+        elif inner.startswith("cast_") or "cast" in inner.split(":")[0]:
             classes.append("cast_deviation")
     return classes
 
 
+def unclassified_fails(report: dict) -> list[str]:
+    """Fail strings that map to NO known repair grammar (T14: unknown failures
+    must never be blind-repaired as gradual_drift)."""
+    known = classify_fails(report)
+    out: list[str] = []
+    for f in report.get("fails", []):
+        inner = _strip_gate_prefix(f)
+        matched = (
+            inner.startswith("drift:") or "FROZEN" in inner
+            or inner.startswith("first-frame drift")
+            or "FLIP mid-clip" in inner or "unusable" in inner
+            or "faces camera" in inner
+            or inner.startswith("cast_") or "cast" in inner.split(":")[0])
+        if not matched:
+            out.append(f)
+    # if drift failed but carried NO class, that is unknown too
+    if any(_strip_gate_prefix(f).startswith("drift:") for f in report.get("fails", [])) \
+            and not any(c in ("gradual_drift", "sudden_jump") for c in known):
+        out.append("drift without a classified fail_class")
+    return out
+
+
 def plan_reroll(report: dict, seed: int, attempt: int = 1,
-                tod_class: str = "day") -> RerollPlan:
+                tod_class: str = "day",
+                reviewed_sudden_jump: bool = False) -> RerollPlan:
     """Build the hardened re-mint plan for a failed mint.
 
     attempt counts prior re-mints of this beat (1 = first repair).
+
+    T14 fail-closed rules:
+    * sudden_jump is NEVER auto-repaired — the human-review stop persists
+      across every round and every resume until an explicit operator decision
+      (``reviewed_sudden_jump=True``) is recorded by the caller.
+    * unknown failure classes get no grammar and no repair — operator review,
+      never a blind gradual_drift re-mint.
     """
-    classes = classify_fails(report) or ["gradual_drift"]
+    unknowns = unclassified_fails(report)
+    classes = classify_fails(report)
+    if unknowns:
+        return RerollPlan(
+            beat_id=report.get("beat", "?"), from_seed=seed,
+            to_seed=seed + SEED_STEP, grammar=[],
+            reason="unknown: " + "; ".join(unknowns)[:200],
+            allowed=False,
+            note=("unknown failure class — operator review required, "
+                  "no blind repair (T14)"))
+    if not classes:
+        return RerollPlan(
+            beat_id=report.get("beat", "?"), from_seed=seed,
+            to_seed=seed + SEED_STEP, grammar=[],
+            reason="no classified failures",
+            allowed=False,
+            note="no repair class matched — operator review (T14)")
     grammar = [HARDENED[c] for c in dict.fromkeys(classes)]
 
     allowed = True
     note = ""
-    if "sudden_jump" in classes and attempt == 1:
+    if "sudden_jump" in classes and not reviewed_sudden_jump:
+        # taste call at EVERY attempt — round 2+ may not mint uninspected
         allowed = False
         note = ("inspect the step frame first — may be a scene-motivated "
-                "lighting event (taste call, not a re-mint)")
+                "lighting event (taste call, not a re-mint); this stop "
+                "persists across rounds and resumes until an explicit "
+                "operator review decision (T14)")
     elif tod_class in TOD_ONE_SHOT_CLASSES and attempt >= 2:
         allowed = False
         note = ("golden-hour drift basin: one hardened re-mint spent; "
