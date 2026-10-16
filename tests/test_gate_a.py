@@ -153,7 +153,7 @@ def _replay(answers):
 
 
 def test_gate_frame_clean_pass(tmp_path):
-    spec = GateSpec({"mode": "walk", "expect": "R"})
+    spec = GateSpec({"mode": "walk", "expect": "R", "scale_check": False})
     answers = {
         "B1|rope": [CLEAN_ROPE, CLEAN_ROPE],
         "B1|facing_man": ["RIGHT", "RIGHT"],

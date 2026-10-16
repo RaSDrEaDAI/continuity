@@ -33,10 +33,15 @@ def _deck_dict(scene_a="man walks the salt flat, dry horizon",
         "beats": [
             {"id": "B1_walk", "seed": 7101, "locks": ["both face RIGHT"],
              "scene": scene_a, "tod": "flat midday light",
-             "camera": "lateral_track", "qc": {"mode": "walk", "expect": "R"}},
+             "camera": "lateral_track",
+             # T14: no charsheet reference image exists for this synthetic
+             # deck, so the scale contract is declared absent (validated
+             # spec justification) instead of silently skipped.
+             "qc": {"mode": "walk", "expect": "R", "scale_check": False}},
             {"id": "B2_rest", "seed": 7102, "locks": ["zero people"],
              "scene": scene_b, "tod": "afternoon",
-             "camera": "static_drift", "qc": {"mode": "solo_camel"}},
+             "camera": "static_drift",
+             "qc": {"mode": "solo_camel", "scale_check": False}},
         ],
     }
 
@@ -132,7 +137,7 @@ class Lanes:
             json.dump(report, fh)
         return report
 
-    def assemble(self, reports, out_path, workdir="."):
+    def assemble(self, reports, out_path, workdir=".", **kw):
         self.master = out_path
         order = [r for r in reports if r["verdict"] == "PASS"]
         with open(out_path, "wb") as fh:
