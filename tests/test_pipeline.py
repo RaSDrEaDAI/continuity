@@ -34,6 +34,15 @@ def _detect_tokenizer():
 
 TOK = _detect_tokenizer()
 
+# Production-run tests exercise the real pipeline (exact-T5 audit is a
+# fail-closed contract for non-dry runs). On a clean machine without the
+# tokenizer + auditor extra they skip; everything else (validation, dry-run,
+# offline gates) runs everywhere.
+needs_tok = pytest.mark.skipif(
+    TOK is None,
+    reason="production-run test: needs T5 tokenizer + auditor extra "
+           "(box-local path or HF-cached t5-small)")
+
 
 # ---------- fixtures ----------
 
@@ -196,7 +205,7 @@ def test_unknown_model_key_is_an_error_not_a_silent_drop(env):
     bad["model"]["lora"] = "flux/sn_caico.safetensors"  # the historical footgun
     deck = _write_deck(env["tmp"], bad)
     with pytest.raises(UsageError, match="unknown model keys.*lora"):
-        run(_cfg(deck, env["tmp"]))
+        run(_cfg(deck, env["tmp"], dry_run=True))
 
 
 def test_unknown_beat_key_rejected(env):
@@ -204,7 +213,7 @@ def test_unknown_beat_key_rejected(env):
     bad["beats"][0]["checkpoint"] = "x.safetensors"
     deck = _write_deck(env["tmp"], bad)
     with pytest.raises(UsageError, match="unknown keys.*checkpoint"):
-        run(_cfg(deck, env["tmp"]))
+        run(_cfg(deck, env["tmp"], dry_run=True))
 
 
 def test_duplicate_beat_ids_rejected(env):
@@ -212,7 +221,7 @@ def test_duplicate_beat_ids_rejected(env):
     bad["beats"][1]["id"] = bad["beats"][0]["id"]
     deck = _write_deck(env["tmp"], bad)
     with pytest.raises(UsageError, match="duplicate beat ids"):
-        run(_cfg(deck, env["tmp"]))
+        run(_cfg(deck, env["tmp"], dry_run=True))
 
 
 # ---------- dry run ----------
@@ -233,6 +242,7 @@ def test_dry_run_touches_no_gpu_no_network(env, monkeypatch, lanes):
 
 # ---------- happy path ----------
 
+@needs_tok
 def test_full_run_passes_both_beats_and_assembles_master(env, lanes):
     l = lanes()
     deck = _write_deck(env["tmp"])
@@ -256,6 +266,7 @@ def test_full_run_passes_both_beats_and_assembles_master(env, lanes):
     assert state["usage"]["gpu_seconds"] == 3.0  # 2 mints x 1.5s fake
 
 
+@needs_tok
 def test_gate_a_fail_rolls_seed_ladder_then_escalates(env, lanes):
     l = lanes()
     answers = _replay_answers_pass()
@@ -281,6 +292,7 @@ def test_gate_a_fail_rolls_seed_ladder_then_escalates(env, lanes):
     assert summary["ok"] is False
 
 
+@needs_tok
 def test_gate_b_fail_routes_hardened_remint_at_seed_plus_100(env, lanes):
     l = lanes(gate_b_fail_first=True)  # B1's first gate B fails (gradual drift)
     deck = _write_deck(env["tmp"])
@@ -296,7 +308,8 @@ def test_gate_b_fail_routes_hardened_remint_at_seed_plus_100(env, lanes):
     assert rr and rr[0]["from_seed"] == 3001 and rr[0]["to_seed"] == 3101
 
 
-def test_gpu_busy_pauses_the_run_resume_safe(env, lanes, monkeypatch):
+@needs_tok
+def test_gpu_busy_pauses_the_run_resume_safe(env, monkeypatch, lanes):
     l = lanes()
     calls = {"n": 0}
     real_mint = l.mint
@@ -321,6 +334,7 @@ def test_gpu_busy_pauses_the_run_resume_safe(env, lanes, monkeypatch):
 
 # ---------- resume ----------
 
+@needs_tok
 def test_resume_repeats_nothing_approved(env, lanes):
     l = lanes()
     deck = _write_deck(env["tmp"])
@@ -338,6 +352,7 @@ def test_resume_repeats_nothing_approved(env, lanes):
     assert second["master"]["included"] == ["B1_walk", "B2_rest"]
 
 
+@needs_tok
 def test_resume_invalidates_on_changed_prompt(env, lanes):
     l = lanes()
     deck = _write_deck(env["tmp"])
