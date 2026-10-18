@@ -18,7 +18,21 @@ import continuity.orchestrator.pipeline as pl
 from continuity.orchestrator.pipeline import PipelineConfig, UsageError, run
 from continuity.mint.lane import EXIT_GPU_BUSY, EXIT_OK
 
-TOK = "C:/Users/Owner/ComfyUI-Installs/ComfyUI/ComfyUI/comfy/text_encoders/t5_tokenizer"
+def _detect_tokenizer():
+    """Box-local T5 tokenizer when available (exact audit coverage on the dev
+    machine); None elsewhere so the pipeline tests run in estimate mode on a
+    clean install (no auditor extra, no machine-local paths)."""
+    p = "C:/Users/Owner/ComfyUI-Installs/ComfyUI/ComfyUI/comfy/text_encoders/t5_tokenizer"
+    if not os.path.isdir(p):
+        return None
+    try:
+        import transformers  # noqa: F401  (auditor extra)
+    except ImportError:
+        return None
+    return p
+
+
+TOK = _detect_tokenizer()
 
 
 # ---------- fixtures ----------
