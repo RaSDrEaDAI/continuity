@@ -2,6 +2,12 @@
 
 **One character sheet + a beat list in → a cut, QC-gated multi-shot video sequence out.**
 
+> **See it work in 2 minutes:** [`PROOF.md`](PROOF.md) — a recorded run with
+> the rejection story included: one beat condemned at the keyframe gate
+> (verbatim rope-instrument verdict), one clean beat end-to-end, and one clip
+> condemned by the deterministic drift scan after it passed the keyframe gate.
+> Replays offline in seconds for $0.
+
 Built for the Comfy Dev Platform Challenge (Open Call, Oct 2026) on top of the
 [Comfy Developer Platform](https://developers.comfy.org) — the official
 `comfy-sdk` (pinned 0.5.0) drives `comfy-api-proxy` (pinned 0.1.6, Comfy API

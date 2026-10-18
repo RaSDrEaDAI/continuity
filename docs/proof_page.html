@@ -1,0 +1,89 @@
+<!DOCTYPE html><html lang='en'><head><meta charset='utf-8'>
+<meta name='viewport' content='width=device-width, initial-scale=1'>
+<title>Continuity — proof viewer (recorded run)</title>
+<style>
+:root { color-scheme: dark; }
+* { box-sizing: border-box; }
+body { font-family: -apple-system, 'Segoe UI', Roboto, sans-serif; margin: 0;
+       background: #101418; color: #d8dee6; line-height: 1.55; }
+.wrap { max-width: 980px; margin: 0 auto; padding: 32px 20px 80px; }
+h1 { font-size: 1.7rem; letter-spacing: .3px; }
+h2 { margin-top: 2.2rem; border-bottom: 1px solid #2a3138; padding-bottom: .3rem; }
+.banner { background: #1b2530; border: 1px solid #31506b; border-radius: 10px;
+          padding: 12px 16px; margin: 18px 0; }
+.card { background: #161b21; border: 1px solid #2a3138; border-radius: 10px;
+        padding: 16px 18px; margin: 14px 0; }
+.card img { max-width: 100%; border-radius: 6px; display: block; }
+.pass { color: #7dd97a; font-weight: 700; }
+.fail { color: #ff7d6b; font-weight: 700; }
+.mono { font-family: ui-monospace, 'Cascadia Code', Menlo, Consolas, monospace;
+        font-size: .85rem; background: #0d1117; border: 1px solid #2a3138;
+        border-radius: 6px; padding: 10px 12px; white-space: pre-wrap; }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+td, th { border: 1px solid #2a3138; padding: 6px 9px; text-align: left; }
+video { max-width: 100%; border-radius: 6px; display: block; margin-top: 8px; }
+a { color: #7ab8ff; }
+.small { color: #8a94a0; font-size: .85rem; }
+</style></head><body><div class='wrap'>
+<h1>Continuity — proof viewer</h1>
+<div class='banner'><b>REPLAY of a recorded run</b> — built from evidence committed to the <a href='https://github.com/RaSDrEaDAI/continuity'>repo</a> (fixtures + recorded gate reports). Not a live service. Demo video: <a href='https://res.cloudinary.com/dg1lb4q9o/video/upload/v1791939296/projects/comfy-challenge/t9_demo_v1.mp4'>62s cut</a>.</div>
+<p>One character sheet + a beat list in; keyframes pass vision gates <i>before</i> any video is minted; mints are drift-scanned in code; failures never reach the cut. Below: one clean loop and two real rejections.</p>
+<h2>Input — charsheet + 3-beat deck</h2>
+<div class='mono'>Signal Nomad: skinny desert nomad mid-40s, off-white galabia, one all-teal tagelmust wrapping crown and lower face, round silver goggles up on the wrap, weathered brown leather pack with brass radio box (single amber pilot light), copper antenna staff; Static: female dromedary, sandy coat, woven indigo saddle blanket, no halter lead.</div>
+<table><tr><th>beat</th><th>seed</th><th>locks</th><th>scene</th><th>camera</th><th>T5</th></tr>
+<tr><td>R1_envmacro</td><td>9101</td><td>zero people, zero animals, zero rope</td><td>extreme close-up of a cracked salt crust with a worn leather trekking boot pressing into it, boot toe only</td><td>static drift</td><td>108</td></tr>
+<tr><td>R2_pair</td><td>9102</td><td>both face and walk toward the right edge; no rope or tether anywhere</td><td>man and camel walking side by side across a wide salt flat under a pale morning sky</td><td>lateral track</td><td>113</td></tr>
+<tr><td>R3_driftdusk</td><td>9103</td><td>exactly one man, zero camels, zero rope; brightness stays constant from first frame to last</td><td>the nomad kneels at a small brass radio on salt crust, adjusting one dial, calm dusk light</td><td>static drift</td><td>116</td></tr>
+</table>
+<h2>Gate A — keyframes (gated: 3, passed: 2, instrument gate-a/1, provider replay)</h2>
+<div class='card'><h3>R1_envmacro — <span class='pass'>PASS</span></h3>
+<img src='https://res.cloudinary.com/dg1lb4q9o/image/upload/v1792328916/projects/comfy-challenge/viewer/R1_envmacro_s9101.jpg' alt='R1_envmacro keyframe'>
+<p class='small'>two independent passes AGREE · instrument gate-a/1</p>
+</div>
+<div class='card'><h3>R2_pair — <span class='fail'>CONDEMNED</span></h3>
+<img src='https://res.cloudinary.com/dg1lb4q9o/image/upload/v1792328917/projects/comfy-challenge/viewer/R2_pair_s9102.jpg' alt='R2_pair keyframe'>
+<p class='small'>two independent passes AGREE · instrument gate-a/1</p>
+<p><span class='fail'>fail:</span> rope: free-hanging segment (verdict YES)</p>
+<p><span class='fail'>fail:</span> facing: cross-subject mismatch (man RIGHT vs camel LEFT)</p>
+<p><span class='fail'>fail:</span> facing_camel: LEFT walks against expected R</p>
+<p class='small'>recorded rope segment inventory (pass 1 of 2, verbatim):</p>
+<div class='mono'>segment inventory at her head:
+(a) cheek straps lying flat against her face
+(b) one lead rope hangs free from the halter ring, unattached end swinging at mid-neck
+FREE-HANGING SEGMENT: YES</div>
+<p><b>Never minted.</b> The GPU cost of a bad video is never spent on it.</p>
+</div>
+<div class='card'><h3>R3_driftdusk — <span class='pass'>PASS</span></h3>
+<img src='https://res.cloudinary.com/dg1lb4q9o/image/upload/v1792328918/projects/comfy-challenge/viewer/R3_driftdusk_s9103.jpg' alt='R3_driftdusk keyframe'>
+<p class='small'>two independent passes AGREE · instrument gate-a/1</p>
+</div>
+<h2>Mint + Gate B (gated: 2, passed: 1, $0 deterministic)</h2>
+<div class='card'><h3>R1_envmacro clip — <span class='pass'>PASS</span></h3>
+<video controls preload='metadata' src='https://res.cloudinary.com/dg1lb4q9o/video/upload/v1792328919/projects/comfy-challenge/viewer/R1_envmacro_s9101.mp4'></video>
+</div>
+<div class='card'><h3>R3_driftdusk clip — <span class='fail'>CONDEMNED</span></h3>
+<video controls preload='metadata' src='https://res.cloudinary.com/dg1lb4q9o/video/upload/v1792328921/projects/comfy-challenge/viewer/R3_driftdusk_s9103.mp4'></video>
+<p><span class='fail'>fail:</span> drift: gradual_drift (swing 30.2 maxstep 6.4)</p>
+<p>sky-band drift scan: swing <b>30.2</b> (threshold 25), max step 6.4, class gradual_drift — excluded from the master cut.
+</div>
+<h2>Live-lane measurements (RTX 5090)</h2><ul>
+<li>15.0 s/frame warm (FLUX.1-dev fp8 + style LoRA, 1536x864)</li>
+<li>8/8 rendered, ship gate 8/8 exact-T5 PASS; Gate A 2/8 PASS (pair-scale rope wall — documented)</li>
+<li>LTX-2.5 i2v 1248x704x289f: 302.4 s and 215.5 s warm (two beats)</li>
+<li>104 live vision calls for a full 10-frame gate: $0.021 (solo-read instruments, hosted vision API)</li>
+<li>the whole 3-beat proof below replays in ~12 s for $0</li>
+</ul>
+<h2>Replay it yourself</h2>
+<div class='mono'>git clone https://github.com/RaSDrEaDAI/continuity
+cd continuity &amp;&amp; pip install -e .[dev]
+continuity gate-a --manifest examples/offline_demo/offline_demo.manifest.json \
+  --beats examples/offline_demo/offline_demo.beats.json \
+  --replay examples/offline_demo/replay/gate_a_answers.json --out /tmp/ga
+continuity gate-b --beats examples/offline_demo/offline_demo.beats.json \
+  --keyframes examples/offline_demo/offline_demo.manifest.json \
+  --seeds examples/offline_demo/replay/seeds.json --no-vision \
+  --out /tmp/gb examples/offline_demo/clips/R1_envmacro_s9101.mp4 \
+  examples/offline_demo/clips/R3_driftdusk_s9103.mp4</div>
+<h2>Claims discipline</h2><ul><li><b>Implemented:</b> token audit, gated keyframes, Gate A instruments, LTX-2.5 first-frame mints, Gate B drift scan, PASS-only master, offline replay.</li><li><b>Human-assisted:</b> decks authored with operator review; hosted vision API (disclosed); taste calls operator-gated.</li><li><b>Roadmap:</b> unattended production, hosted viewer, project tracking UI.</li></ul>
+<p class='small'>Signal Nomad IP · MIT code · generated 2026-10-18T09:14:04-04:00 by continuity proof-page</p>
+</div></body></html>

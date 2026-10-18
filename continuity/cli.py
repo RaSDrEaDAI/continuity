@@ -48,6 +48,18 @@ def build_parser() -> argparse.ArgumentParser:
     ga_p.add_argument("--passes", type=int, default=2,
                       help="independent passes per instrument (default 2)")
 
+    pp_p = sub.add_parser("proof-page", help="T17: regenerate the proof viewer page")
+    pp_p.add_argument("--fixtures", default="examples/offline_demo",
+                      help="fixture bundle dir (deck + manifest + replay)")
+    pp_p.add_argument("--gate-a-out", default=None,
+                      help="recorded gate-a report dir (verdicts quoted verbatim)")
+    pp_p.add_argument("--gate-b-out", default=None,
+                      help="recorded gate-b report dir")
+    pp_p.add_argument("--out-md", default="PROOF.md",
+                      help="output markdown path (GitHub-rendered viewer)")
+    pp_p.add_argument("--out-html", default="proof_page.html",
+                      help="output standalone html path")
+
     gb_p = sub.add_parser("gate-b", help="T7: mint QC — drift/motion/consistency")
     gb_p.add_argument("clips", nargs="+", help="mint clip paths (beat order)")
     gb_p.add_argument("--beats", required=True, help="deck JSON (qc specs)")
@@ -172,6 +184,25 @@ def main(argv=None) -> int:
               f"({summary['passed']}/{summary['gated']} passed, "
               f"failed: {summary['failed'] or 'none'})")
         return 0 if summary["all_pass"] else 1
+
+    if args.stage == "proof-page":
+        from continuity import proof_page
+        data = proof_page.build_data(args.fixtures, args.gate_a_out,
+                                     args.gate_b_out)
+        md = proof_page.render_markdown(data)
+        with open(args.out_md, "w", encoding="utf-8") as fh:
+            fh.write(md)
+        html = proof_page.render_html(data)
+        hits = proof_page.audit_public_safety(html)
+        if hits:
+            print(f"ABORTED: public-safety audit found banned strings in the "
+                  f"HTML: {hits}", file=sys.stderr)
+            return 2
+        with open(args.out_html, "w", encoding="utf-8") as fh:
+            fh.write(html)
+        print(f"wrote {args.out_md} and {args.out_html} "
+              f"(public-safety audit: clean)")
+        return 0
 
     if args.stage == "gate-b":
         import json as _json
