@@ -1,0 +1,29 @@
+{
+ "R1_envmacro": {
+  "beat": "R1_envmacro",
+  "seed": 9101,
+  "camera": "static drift",
+  "tokens": 108,
+  "audit_mode": "estimate (fixture; live runs use the T5-exact tokenizer)",
+  "prompt": "zero people, zero animals, zero rope -- extreme close-up of a cracked salt crust with a worn leather trekking boot pressing into it, boot toe only",
+  "file": "frames/R1_envmacro_s9101.jpg"
+ },
+ "R2_pair": {
+  "beat": "R2_pair",
+  "seed": 9102,
+  "camera": "lateral track",
+  "tokens": 113,
+  "audit_mode": "estimate (fixture; live runs use the T5-exact tokenizer)",
+  "prompt": "both face and walk toward the right edge; no rope or tether anywhere -- man and camel walking side by side across a wide salt flat under a pale morning sky",
+  "file": "frames/R2_pair_s9102.jpg"
+ },
+ "R3_driftdusk": {
+  "beat": "R3_driftdusk",
+  "seed": 9103,
+  "camera": "static drift",
+  "tokens": 116,
+  "audit_mode": "estimate (fixture; live runs use the T5-exact tokenizer)",
+  "prompt": "exactly one man, zero camels, zero rope; brightness stays constant from first frame to last -- the nomad kneels at a small brass radio on salt crust, adjusting one dial, calm dusk light",
+  "file": "frames/R3_driftdusk_s9103.jpg"
+ }
+}

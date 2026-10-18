@@ -1,0 +1,40 @@
+{
+ "charsheet": "Signal Nomad: skinny desert nomad mid-40s, off-white galabia, one all-teal tagelmust wrapping crown and lower face, round silver goggles up on the wrap, weathered brown leather pack with brass radio box (single amber pilot light), copper antenna staff; Static: female dromedary, sandy coat, woven indigo saddle blanket, no halter lead.",
+ "beats": [
+  {
+   "id": "R1_envmacro",
+   "seed": 9101,
+   "locks": "zero people, zero animals, zero rope",
+   "scene": "extreme close-up of a cracked salt crust with a worn leather trekking boot pressing into it, boot toe only",
+   "tod": "late morning, locked",
+   "camera": "static drift",
+   "qc": {
+    "mode": "env"
+   }
+  },
+  {
+   "id": "R2_pair",
+   "seed": 9102,
+   "locks": "both face and walk toward the right edge; no rope or tether anywhere",
+   "scene": "man and camel walking side by side across a wide salt flat under a pale morning sky",
+   "tod": "morning, locked",
+   "camera": "lateral track",
+   "qc": {
+    "mode": "walk",
+    "expect": "R",
+    "scale_check": false
+   }
+  },
+  {
+   "id": "R3_driftdusk",
+   "seed": 9103,
+   "locks": "exactly one man, zero camels, zero rope; brightness stays constant from first frame to last",
+   "scene": "the nomad kneels at a small brass radio on salt crust, adjusting one dial, calm dusk light",
+   "tod": "dusk, locked",
+   "camera": "static drift",
+   "qc": {
+    "mode": "solo_man"
+   }
+  }
+ ]
+}

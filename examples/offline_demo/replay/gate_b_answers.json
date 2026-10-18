@@ -1,0 +1,242 @@
+{
+ "R1_envmacro|seq00|cast_man": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq00|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R3_driftdusk|seq00|facing_man": [
+  "MAN: AWAY",
+  "MAN: AWAY"
+ ],
+ "R3_driftdusk|seq00|cast_man": [
+  "COUNT : 1",
+  "COUNT : 1"
+ ],
+ "R3_driftdusk|seq00|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq01|cast_man": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq01|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R3_driftdusk|seq01|facing_man": [
+  "MAN: AWAY",
+  "MAN: AWAY"
+ ],
+ "R3_driftdusk|seq01|cast_man": [
+  "COUNT : 1",
+  "COUNT : 1"
+ ],
+ "R3_driftdusk|seq01|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq02|cast_man": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq02|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R3_driftdusk|seq02|facing_man": [
+  "MAN: AWAY",
+  "MAN: AWAY"
+ ],
+ "R3_driftdusk|seq02|cast_man": [
+  "COUNT : 1",
+  "COUNT : 1"
+ ],
+ "R3_driftdusk|seq02|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq03|cast_man": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq03|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R3_driftdusk|seq03|facing_man": [
+  "MAN: AWAY",
+  "MAN: AWAY"
+ ],
+ "R3_driftdusk|seq03|cast_man": [
+  "COUNT : 1",
+  "COUNT : 1"
+ ],
+ "R3_driftdusk|seq03|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq04|cast_man": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq04|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R3_driftdusk|seq04|facing_man": [
+  "MAN: AWAY",
+  "MAN: AWAY"
+ ],
+ "R3_driftdusk|seq04|cast_man": [
+  "COUNT : 1",
+  "COUNT : 1"
+ ],
+ "R3_driftdusk|seq04|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq05|cast_man": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq05|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R3_driftdusk|seq05|facing_man": [
+  "MAN: AWAY",
+  "MAN: AWAY"
+ ],
+ "R3_driftdusk|seq05|cast_man": [
+  "COUNT : 1",
+  "COUNT : 1"
+ ],
+ "R3_driftdusk|seq05|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq06|cast_man": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq06|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R3_driftdusk|seq06|facing_man": [
+  "MAN: AWAY",
+  "MAN: AWAY"
+ ],
+ "R3_driftdusk|seq06|cast_man": [
+  "COUNT : 1",
+  "COUNT : 1"
+ ],
+ "R3_driftdusk|seq06|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq07|cast_man": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq07|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R3_driftdusk|seq07|facing_man": [
+  "MAN: AWAY",
+  "MAN: AWAY"
+ ],
+ "R3_driftdusk|seq07|cast_man": [
+  "COUNT : 1",
+  "COUNT : 1"
+ ],
+ "R3_driftdusk|seq07|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq08|cast_man": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq08|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R3_driftdusk|seq08|facing_man": [
+  "MAN: AWAY",
+  "MAN: AWAY"
+ ],
+ "R3_driftdusk|seq08|cast_man": [
+  "COUNT : 1",
+  "COUNT : 1"
+ ],
+ "R3_driftdusk|seq08|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq09|cast_man": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq09|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R3_driftdusk|seq09|facing_man": [
+  "MAN: AWAY",
+  "MAN: AWAY"
+ ],
+ "R3_driftdusk|seq09|cast_man": [
+  "COUNT : 1",
+  "COUNT : 1"
+ ],
+ "R3_driftdusk|seq09|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq10|cast_man": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq10|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R3_driftdusk|seq10|facing_man": [
+  "MAN: AWAY",
+  "MAN: AWAY"
+ ],
+ "R3_driftdusk|seq10|cast_man": [
+  "COUNT : 1",
+  "COUNT : 1"
+ ],
+ "R3_driftdusk|seq10|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq11|cast_man": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|seq11|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R3_driftdusk|seq11|facing_man": [
+  "MAN: AWAY",
+  "MAN: AWAY"
+ ],
+ "R3_driftdusk|seq11|cast_man": [
+  "COUNT : 1",
+  "COUNT : 1"
+ ],
+ "R3_driftdusk|seq11|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ]
+}

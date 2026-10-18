@@ -1,0 +1,50 @@
+{
+ "R1_envmacro|cast_man": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R1_envmacro|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R2_pair|rope": [
+  "segment inventory at her head:\n(a) cheek straps lying flat against her face\n(b) one lead rope hangs free from the halter ring, unattached end swinging at mid-neck\nFREE-HANGING SEGMENT: YES",
+  "segment inventory at her head:\n(a) cheek straps lying flat against her face\n(b) one lead rope hangs free from the halter ring, unattached end swinging at mid-neck\nFREE-HANGING SEGMENT: YES"
+ ],
+ "R2_pair|facing_man": [
+  "MAN: RIGHT",
+  "MAN: RIGHT"
+ ],
+ "R2_pair|facing_camel": [
+  "CAMEL: LEFT",
+  "CAMEL: LEFT"
+ ],
+ "R2_pair|cast_man": [
+  "COUNT : 1",
+  "COUNT : 1"
+ ],
+ "R2_pair|cast_camel": [
+  "COUNT : 1",
+  "COUNT : 1"
+ ],
+ "R2_pair|gaze": [
+  "GAZE: FORWARD",
+  "GAZE: FORWARD"
+ ],
+ "R3_driftdusk|facing_man": [
+  "MAN: AWAY",
+  "MAN: AWAY"
+ ],
+ "R3_driftdusk|cast_man": [
+  "COUNT : 1",
+  "COUNT : 1"
+ ],
+ "R3_driftdusk|cast_camel": [
+  "COUNT : 0",
+  "COUNT : 0"
+ ],
+ "R3_driftdusk|gaze": [
+  "GAZE: FORWARD",
+  "GAZE: FORWARD"
+ ]
+}

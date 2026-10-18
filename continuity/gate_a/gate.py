@@ -235,9 +235,19 @@ def gate_manifest(manifest_path: str, deck, provider: VisionProvider,
     specs = {b.id: GateSpec(getattr(b, "qc", None)) for b in deck.beats}
     os.makedirs(out_dir, exist_ok=True)
 
+    def _resolve_frame(entry: dict) -> str | None:
+        """Frame path from a manifest entry. Relative paths resolve against
+        the manifest's own directory first (shipped fixture bundles), then
+        against the CWD (render manifests written next to their frames)."""
+        f = entry.get("file")
+        if not f or os.path.exists(f):
+            return f
+        beside = os.path.join(os.path.dirname(os.path.abspath(manifest_path)), f)
+        return beside if os.path.exists(beside) else f
+
     reports = {}
     for beat_id, entry in manifest.items():
-        frame = entry.get("file")
+        frame = _resolve_frame(entry)
         if not frame or not os.path.exists(frame):
             reports[beat_id] = {"verdict": "FAIL",
                                 "fails": [f"frame missing: {frame}"]}

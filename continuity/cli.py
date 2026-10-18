@@ -1,6 +1,7 @@
 """Continuity CLI — one subcommand per pipeline stage."""
 
 import argparse
+import json
 import sys
 
 from continuity import __version__
