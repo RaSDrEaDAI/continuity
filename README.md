@@ -152,6 +152,9 @@ private network. Every failed gate aborts before GPU time is spent
 Watch the self-QC loop work — gate condemnations, the prompt respec, and the
 gate-passed mints, in 62 seconds:
 
+<video src="docs/demo/t9_demo_v1.mp4" controls muted preload="metadata" width="800"></video>
+
+Mirror (if the player above does not load):
 **https://res.cloudinary.com/dg1lb4q9o/video/upload/v1791939296/projects/comfy-challenge/t9_demo_v1.mp4**
 
 ## License

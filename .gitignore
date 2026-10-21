@@ -13,3 +13,4 @@ work/
 *.mp4
 *.flac
 !docs/**/*.png
+!docs/demo/*.mp4
